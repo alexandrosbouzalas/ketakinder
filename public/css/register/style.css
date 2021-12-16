@@ -1,0 +1,47 @@
+.mask {
+  padding-bottom: 100px;
+}
+
+.card {
+  border-radius: 20px;
+  background-color: rgb(74, 77, 76);
+  color: #fdfd96;
+  font-family: "Montserrat", sans-serif;
+}
+
+.form-outline {
+  padding-bottom: 20px;
+}
+
+.form-control-lg {
+  border-radius: 7px;
+  background-color: rgb(211, 211, 211);
+}
+
+.card-body {
+  border: 3px solid #6f6f6f;
+  border-radius: 20px;
+}
+
+#bottometext {
+  color: #007bff;
+}
+
+.errorBorder {
+  border: 3px solid red;
+}
+
+.inputBorder {
+  border: 3px solid #6f6f6f;
+}
+
+.inputBorderFocus:focus {
+  border: 2px solid #007bff;
+}
+
+.errorText {
+  color: #ff3a3a;
+  padding-top: 10px;
+  text-align: center;
+  margin: 0;
+}

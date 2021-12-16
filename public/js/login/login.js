@@ -1,0 +1,122 @@
+$("#first").attr("href", "/home");
+$("#second").attr("href", "/register");
+$("#first").first().text("Home");
+$("#second").first().text("Register");
+
+$("#email").addClass("inputBorder inputBorderFocus");
+$("#password").addClass("inputBorder inputBorderFocus");
+
+$("#submitbutton").on("click", function () {
+  let valid = true;
+  $("[required]").each(function () {
+    if ($(this).is(":invalid") || !$(this).val()) {
+      valid = false;
+      $(this).removeClass("inputBorder");
+      $(this).addClass("errorBorder");
+      $("#message")
+        .html("Please fill out all the fields")
+        .addClass("errorText");
+    } else {
+      $(this).removeClass("errorBorder");
+    }
+  });
+  if (valid) checkInput();
+});
+
+function checkInput() {
+  var valid = true;
+
+  $("[required]").each(function () {
+    if (
+      $(this).attr("id") === "email" &&
+      (!$(this).val() || !checkPattern($(this).attr("id")))
+    ) {
+      $("#message").addClass("errorText");
+
+      valid = false;
+      $("#message").html("Format: text@text.domain");
+      $(this).removeClass("inputBorder");
+      $(this).addClass("errorBorder");
+    }
+    if (
+      $(this).attr("id") === "password" &&
+      (!$(this).val() || $(this).val().length < 8)
+    ) {
+      $("#message").addClass("errorText");
+
+      valid = false;
+      var message = "Valid passwords can not be smaller than 8 characters";
+
+      $("#message").html(message);
+      $("#password").removeClass("inputBorder");
+      $("#password").addClass("errorBorder");
+    }
+  });
+  if (valid) verifySuccess();
+}
+
+function checkPattern(id) {
+  var element = document.getElementById(id).value;
+
+  const reEmail =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const rePassword =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
+  if (id === "email") return reEmail.test(element);
+  if (id === "password") return rePassword.test(element);
+  return false;
+}
+
+const verifySuccess = () => {
+  data = {};
+
+  const formData = new FormData(document.querySelector("form"));
+  for (var pair of formData.entries()) {
+    if (pair[0] === "email") Object.assign(data, { email: pair[1] });
+    if (pair[0] === "password") Object.assign(data, { password: pair[1] });
+  }
+
+  $.ajax({
+    url: "/login",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({ data: data }),
+    success: function (response) {
+      console.log(response);
+      Swal.fire({
+        title: `Welcome back ${response.user.username}`,
+        icon: "success",
+        allowOutsideClick: false,
+        showCloseButton: false,
+        showCancelButton: false,
+        showConfirmButton: false,
+        width: "40%",
+        timer: 3000,
+      }).then(() => {
+        window.location = "/home";
+      });
+    },
+    error: function (err) {
+      try {
+        Swal.fire({
+          title: err.responseJSON.msg,
+          icon: "error",
+          allowOutsideClick: false,
+          confirmButtonText: "OK",
+          confirmButtonColor: "#007bff",
+          width: "40%",
+        });
+      } catch {
+        Swal.fire({
+          title: "There was an error processing your request",
+          icon: "error",
+          allowOutsideClick: false,
+          confirmButtonText: "OK",
+          confirmButtonColor: "#007bff",
+          width: "40%",
+        });
+      }
+    },
+  });
+};

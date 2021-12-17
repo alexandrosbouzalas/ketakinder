@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    active: false,
   },
   email: {
     type: String,
@@ -21,10 +20,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: Date.now(),
   },
-  uID: {
+  uId: {
     type: String,
     required: true,
     unique: true,
+  },
+  active: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
 });
 

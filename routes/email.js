@@ -1,5 +1,4 @@
 const express = require("express");
-const sjcl = require("sjcl");
 
 const router = express.Router();
 
@@ -8,13 +7,14 @@ const User = require("./../models/user");
 
 router.use(express.json());
 
-router.get("/verify/:token", (req, res) => {
+router.get("/verify/:token", async (req, res) => {
   const token = req.params.token;
-  console.log(token);
 
   try {
-    const { uId } = Token.find({ token: token });
-    if (uId.token) {
+    const uId = await Token.find({ token: token });
+
+    if (uId[0].token) {
+      await User.updateOne({ uId: uId[0].uId }, { $set: { active: true } });
     }
   } catch (e) {
     res.send("Token does not exist");

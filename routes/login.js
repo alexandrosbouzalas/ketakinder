@@ -24,6 +24,7 @@ router.post("/", async (req, res) => {
 
   try {
     const user = await User.find({ email: email });
+    const active = await User.find({})
 
     if (email && password) {
       if (req.session.authenticated) {

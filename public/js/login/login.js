@@ -83,19 +83,63 @@ const verifySuccess = () => {
     contentType: "application/json",
     data: JSON.stringify({ data: data }),
     success: function (response) {
-      console.log(response);
-      Swal.fire({
-        title: `Welcome back ${response.user.username}`,
-        icon: "success",
-        allowOutsideClick: false,
-        showCloseButton: false,
-        showCancelButton: false,
-        showConfirmButton: false,
-        width: "40%",
-        timer: 3000,
-      }).then(() => {
-        window.location = "/home";
-      });
+      if (response.msg && response.msg.includes("activated")) {
+        Swal.fire({
+          title: "Your account has not yet been activated",
+          text: "Check you emails for the validation procedure.",
+          icon: "warning",
+          allowOutsideClick: false,
+          showCancelButton: true,
+          confirmButtonText: "Resend activation email",
+          cancelButtonText: "OK",
+          confirmButtonColor: "#007bff",
+          width: "40%",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            data = { uId: response.reactivationuId };
+            $.ajax({
+              url: "/register/resend",
+              method: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({ data: data }),
+              success: function (response) {
+                Swal.fire({
+                  title: response.msg,
+                  icon: "success",
+                  allowOutsideClick: false,
+                  confirmButtonText: "OK",
+                  confirmButtonColor: "#007bff",
+                  width: "40%",
+                });
+              },
+              error: function (err) {
+                console.log("err");
+                Swal.fire({
+                  title: err.responseJSON.msg,
+                  icon: "error",
+                  allowOutsideClick: false,
+                  confirmButtonText: "OK",
+                  confirmButtonColor: "#007bff",
+                  width: "40%",
+                });
+              },
+            });
+          }
+        });
+      } else {
+        Swal.fire({
+          title: `Welcome back ${response.user.username}`,
+          icon: "success",
+          allowOutsideClick: false,
+          showCloseButton: false,
+          showCancelButton: false,
+          showConfirmButton: false,
+          width: "40%",
+          timer: 3000,
+        }).then(() => {
+          window.location = "/home";
+        });
+      }
     },
     error: function (err) {
       try {

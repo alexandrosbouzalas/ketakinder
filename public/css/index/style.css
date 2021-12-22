@@ -1,13 +1,8 @@
 #welcomebanner {
-  padding: 300px 10px 10px 10px;
+  padding: 200px 10px 10px 10px;
   height: 700px;
   text-align: center;
   font-family: "Poppins";
   color: #fdfd96;
   font-size: 60px;
-  background-image: url(../../img/christian.gif);
-  align-items: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
 }

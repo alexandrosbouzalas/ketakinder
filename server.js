@@ -1,20 +1,19 @@
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
-const sanitize = require("mongo-sanitize");
 const redis = require("redis");
 const redisStore = require("connect-redis")(session);
 const redisClient = redis.createClient();
-const swal = require("sweetalert2");
 
 const w2gRouter = require("./routes/w2g");
 const registerRouter = require("./routes/register");
 const loginRouter = require("./routes/login");
 const homeRouter = require("./routes/home");
 const logoutRouter = require("./routes/logout");
-const emailRouter = require("./routes/email");
+const verifyRouter = require("./routes/verify");
 
-const port = 3000;
+const port = 80;
+const portHTTPS = 443;
 const title = "index";
 
 const app = express();
@@ -49,16 +48,12 @@ app.use(
       ttl: 260,
     }),
     secure: false, // if true only transmit cookie over https
-    httpOnly: false, // if true prevent client side JS from
+    httpOnly: false, // if true prevent client side JS
     resave: false,
 
     saveUninitialized: false,
   })
 );
-
-app.get("/test/keno", (req, res) => {
-  res.send("Hello");
-});
 
 app.get("/", (req, res) => {
   if (req.session.authenticated) res.redirect("/home");
@@ -66,8 +61,8 @@ app.get("/", (req, res) => {
 });
 
 try {
-  app.listen(process.env.port || port);
-  console.info(`Listening on: https://localhost:${port}`);
+  app.listen(3000);
+  console.info(`Listening on: https://ketakinder:${port}`);
 } catch (e) {
   console.log("There was an error starting the app");
   console.log(e.message);
@@ -78,4 +73,4 @@ app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/home", homeRouter);
 app.use("/logout", logoutRouter);
-app.use("/email", emailRouter);
+app.use("/verify", verifyRouter);

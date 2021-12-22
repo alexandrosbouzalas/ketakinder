@@ -24,25 +24,32 @@ router.post("/", async (req, res) => {
 
   try {
     const user = await User.find({ email: email });
-    const active = await User.find({})
+    const active = user[0].active;
 
     if (email && password) {
       if (req.session.authenticated) {
         res.json(req.session);
       } else {
         if (user) {
-          const valid = await bcrypt.compare(password, user[0].password);
+          if (active) {
+            const valid = await bcrypt.compare(password, user[0].password);
 
-          username = user[0].username;
+            username = user[0].username;
 
-          if (valid) {
-            req.session.authenticated = true;
-            req.session.user = {
-              username,
-            };
+            if (valid) {
+              req.session.authenticated = true;
+              req.session.user = {
+                username,
+              };
 
-            res.status(200).json(req.session);
-          } else throw new Error("Wrong password");
+              res.status(200).json(req.session);
+            } else throw new Error("Wrong password");
+          } else {
+            res.json({
+              msg: "This account has not yet been activated",
+              reactivationuId: user[0].uId,
+            });
+          }
         } else {
           throw new Error("User not found");
         }

@@ -96,7 +96,6 @@ const verifySuccess = () => {
           width: "40%",
         }).then((result) => {
           if (result.isConfirmed) {
-            data = { uId: response.reactivationuId };
             $.ajax({
               url: "/register/resend",
               method: "POST",
@@ -113,7 +112,6 @@ const verifySuccess = () => {
                 });
               },
               error: function (err) {
-                console.log("err");
                 Swal.fire({
                   title: err.responseJSON.msg,
                   icon: "error",

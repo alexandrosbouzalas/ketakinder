@@ -6,24 +6,18 @@
           <div class="col-12 col-md-9 col-lg-7 col-xl-6">
             <div class="card">
               <div class="card-body p-5">
-                <h2 class="text-uppercase text-center mb-5" style="font-weight: bolder;">Login</h2>
-  
-                <form action="/login" method="post" name="registerform" >
+                <h4 class=" text-center mb-5">Forgot your account's password or having trouble logging in? Enter your email address and we'll send you a recovery link.</h4>
+
+                <form action="/recover" method="post" name="registerform" >
                   <div class="form-outline mb-4">
                     <input required name="email" id="email" placeholder="E-Mail"
                     title="characters@characters.domain" class="form-control form-control-lg" autocomplete="on"/>
-                  </div>
-  
-                  <div class="form-outline mb-4">
-                    <input required name="password" type="password" id="password" placeholder="Password" title="Enter a password" class="form-control form-control-lg" autocomplete="on"/>
                     <p id="message"></p>
                   </div>
                   
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button type="button" id="submitbutton"class="btn btn-primary btn-lg">Login</button>
+                    <button type="button" id="submitbutton"class="btn btn-primary btn-lg">Send recovery email</button>
                   </div>
-  
-                  <p id="bottomtext" class="text-center text-muted mt-5 mb-0"> <a href="/recover" class="fw-bold text-body"><u>Forgot password?</u></a></p>
               </div>
             </div>
           </div>
@@ -35,5 +29,5 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/global.js"></script>
-<script src="/js/login/login.js"></script>
+<script src="/js/recover/recover.js"></script>
 </html>

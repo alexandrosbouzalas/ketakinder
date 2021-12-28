@@ -27,26 +27,6 @@ function checkInput() {
 
   $("[required]").each(function () {
     if (
-      $(this).attr("id") === "username" &&
-      (!$(this).val() || !checkPattern($(this).attr("id")))
-    ) {
-      valid = false;
-      $("#message")
-        .html("Usernames must be 5-20 characters long")
-        .addClass("errorText");
-      $(this).removeClass("inputBorder");
-      $(this).addClass("errorBorder");
-    }
-    if (
-      $(this).attr("id") === "email" &&
-      (!$(this).val() || !checkPattern($(this).attr("id")))
-    ) {
-      valid = false;
-      $("#message").html("Format: text@text.domain").addClass("errorText");
-      $(this).removeClass("inputBorder");
-      $(this).addClass("errorBorder");
-    }
-    if (
       $(this).attr("id") === "password" &&
       (!$(this).val() || !checkPattern($(this).attr("id")))
     ) {
@@ -79,15 +59,9 @@ function checkInput() {
 function checkPattern(id) {
   var element = document.getElementById(id).value;
 
-  const reUsername =
-    /^[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){2,18}[a-zA-Z0-9]$/;
-  const reEmail =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const rePassword =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
-  if (id === "username") return reUsername.test(element);
-  if (id === "email") return reEmail.test(element);
   if (id === "password") return rePassword.test(element);
   return false;
 }
@@ -97,30 +71,28 @@ const verifySuccess = () => {
 
   const formData = new FormData(document.querySelector("form"));
   for (var pair of formData.entries()) {
-    if (pair[0] === "username") Object.assign(data, { username: pair[1] });
-    if (pair[0] === "email") Object.assign(data, { email: pair[1] });
     if (pair[0] === "password") Object.assign(data, { password: pair[1] });
   }
 
   $.ajax({
-    url: "/register",
+    url: `/recover/${window.location.href.split("/")[4]}`,
     method: "POST",
     contentType: "application/json",
     data: JSON.stringify({ data: data }),
     success: function (response) {
       Swal.fire({
-        title: `Registration email sent to ${response.email}.`,
-        text: `If you don't see this email in your inbox within 15 minutes, look for it in your junk mail folder. If you findOne it there, please mark the email as “Not Junk”.`,
+        title: `Password changed successfully`,
         icon: "success",
         allowOutsideClick: false,
         showCloseButton: false,
         showCancelButton: false,
-        showConfirmButton: true,
+        showConfirmButton: false,
         width: "50%",
         background: "#f1f4f6",
         confirmButtonColor: "#007bff",
+        timer: 3000,
       }).then(() => {
-        window.location = "/home";
+        window.location = "/";
       });
     },
     error: function (err) {

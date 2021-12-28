@@ -3,6 +3,6 @@ $("#second").remove();
 
 window.onload = function () {
   setTimeout(() => {
-    window.location.href = "https://localhost";
-  }, 3000);
+    window.location.href = "http://localhost:3000";
+  }, 4000);
 };

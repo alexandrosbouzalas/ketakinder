@@ -1,6 +1,6 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
 const sanitize = require("mongo-sanitize");
+const { bcryptCompare } = require("../public/js/utils");
 
 const router = express.Router();
 
@@ -10,8 +10,9 @@ const User = require("./../models/user");
 const title = "login";
 
 router.use(express.json());
-
 router.use(express.urlencoded({ extended: true }));
+
+router.use("./public/js/utils", bcryptCompare);
 
 router.get("/", (req, res) => {
   if (req.session.authenticated) res.redirect("/home");
@@ -23,33 +24,31 @@ router.post("/", async (req, res) => {
   const { email, password } = req.body.data;
 
   try {
-    const user = await User.find({ email: email });
-    const active = user[0].active;
+    const user = await User.findOne({ email: email });
+    const active = user.active;
 
     if (email && password) {
       if (req.session.authenticated) {
         res.json(req.session);
       } else {
         if (user) {
-          if (active) {
-            const valid = await bcrypt.compare(password, user[0].password);
+          const valid = await bcryptCompare(password, user);
+          const username = user.username;
 
-            username = user[0].username;
-
-            if (valid) {
+          if (valid) {
+            if (active) {
               req.session.authenticated = true;
               req.session.user = {
                 username,
               };
 
               res.status(200).json(req.session);
-            } else throw new Error("Wrong password");
-          } else {
-            res.json({
-              msg: "This account has not yet been activated",
-              reactivationuId: user[0].uId,
-            });
-          }
+            } else {
+              res.json({
+                msg: "This account has not yet been activated",
+              });
+            }
+          } else throw new Error("Wrong password");
         } else {
           throw new Error("User not found");
         }

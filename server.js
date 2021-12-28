@@ -11,6 +11,7 @@ const loginRouter = require("./routes/login");
 const homeRouter = require("./routes/home");
 const logoutRouter = require("./routes/logout");
 const verifyRouter = require("./routes/verify");
+const recoverRouter = require("./routes/recover");
 
 const port = 80;
 const portHTTPS = 443;
@@ -74,3 +75,4 @@ app.use("/login", loginRouter);
 app.use("/home", homeRouter);
 app.use("/logout", logoutRouter);
 app.use("/verify", verifyRouter);
+app.use("/recover", recoverRouter);

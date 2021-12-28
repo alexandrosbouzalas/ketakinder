@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema({
   },
   registeredAt: {
     type: Date,
-    required: true,
     default: Date.now(),
   },
   uId: {

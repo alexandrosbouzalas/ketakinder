@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shaduwar00/Ketakinder.git"
+    "url": "git+https://github.com/alexandrosbouzalas/ketakinder.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shaduwar00/Ketakinder/issues"
+    "url": "https://github.com/alexandrosbouzalas/ketakinder/issues"
   },
-  "homepage": "https://github.com/shaduwar00/Ketakinder#readme",
+  "homepage": "https://github.com/alexandrosbouzalas/ketakinder#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-redis": "^6.0.0",

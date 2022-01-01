@@ -63,7 +63,7 @@ app.get("/", (req, res) => {
 
 try {
   app.listen(3000);
-  console.info(`Listening on: https://ketakinder:${port}`);
+  console.info(`Listening on: https://ketakinder`);
 } catch (e) {
   console.log("There was an error starting the app");
   console.log(e.message);

@@ -1,6 +1,8 @@
 const express = require("express");
 const sanitize = require("mongo-sanitize");
 const { bcryptCompare } = require("../public/js/utils");
+const { validatePassword } = require("../public/js/utils");
+const { validateEmail } = require("../public/js/utils");
 
 const router = express.Router();
 
@@ -13,6 +15,15 @@ router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
 router.use("./public/js/utils", bcryptCompare);
+router.use("./public/js/utils", validatePassword);
+router.use("./public/js/utils", validateEmail);
+
+router.use(function (req, res, next) {
+  req.body = sanitize(req.body);
+  req.query = sanitize(req.query);
+  req.params = sanitize(req.params);
+  next();
+});
 
 router.get("/", (req, res) => {
   if (req.session.authenticated) res.redirect("/home");
@@ -20,12 +31,15 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  req.body = sanitize(req.body);
   const { email, password } = req.body.data;
 
   try {
     const user = await User.findOne({ email: email });
     const active = user.active;
+
+    if (!validateEmail(email.toString())) throw new Error("Invalid email");
+    if (!validatePassword(password.toString()))
+      throw new Error("Invalid password");
 
     if (email && password) {
       if (req.session.authenticated) {

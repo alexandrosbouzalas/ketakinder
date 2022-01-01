@@ -4,6 +4,9 @@ const { sendMail } = require("../public/js/mail");
 const { generateToken } = require("../public/js/utils");
 const { addTime } = require("../public/js/utils");
 const { bcryptHash } = require("../public/js/utils");
+const { validatePassword } = require("../public/js/utils");
+const { validateEmail } = require("../public/js/utils");
+const { validateUsername } = require("../public/js/utils");
 
 // Database models
 const User = require("./../models/user");
@@ -19,6 +22,16 @@ router.use("./public/js/mail", sendMail);
 router.use("./public/js/utils", generateToken);
 router.use("./public/js/utils", addTime);
 router.use("./public/js/utils", bcryptHash);
+router.use("./public/js/utils", validatePassword);
+router.use("./public/js/utils", validateEmail);
+router.use("./public/js/utils", validateUsername);
+
+router.use(function (req, res, next) {
+  req.body = sanitize(req.body);
+  req.query = sanitize(req.query);
+  req.params = sanitize(req.params);
+  next();
+});
 
 function createEmailToken(uId) {
   const token = new Token({
@@ -37,13 +50,19 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
   req.body = sanitize(req.body);
 
+  const { username, email, password } = req.body.data;
+
+  if (!validatePassword(password.toString()))
+    throw new Error("Invalid password");
+  if (!validateEmail(email.toString())) throw new Error("Invalid email");
+  if (!validateUsername(username.toString()))
+    throw new Error("Invalid username");
+
   const usernameCount = await User.aggregate([{ $count: "username" }]);
 
   let count = 1;
 
   if (usernameCount.length != 0) count = usernameCount[0].username;
-
-  const { username, email, password } = req.body.data;
 
   const uId = Math.floor(count + Math.random() * 9000).toString();
 

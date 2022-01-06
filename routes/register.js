@@ -33,9 +33,10 @@ router.use(function (req, res, next) {
   next();
 });
 
-function createEmailToken(uId) {
+function createAccountToken(uId) {
   const token = new Token({
     token: generateToken(),
+    for: "account",
     uId: uId,
     expirationDate: addTime(new Date(), 360),
   });
@@ -76,7 +77,7 @@ router.post("/", async (req, res) => {
   try {
     await user.save();
 
-    const token = createEmailToken(user.uId);
+    const token = createAccountToken(user.uId);
 
     await token.save();
 
@@ -122,9 +123,15 @@ router.post("/", async (req, res) => {
 
 router.post("/resend", async (req, res) => {
   const email = req.body.data.email.toString();
+
   try {
     const user = await User.findOne({ email: email });
     const token = await Token.findOne({ uId: user.uId });
+
+    if (!token) {
+      const token = createAccountToken(user.uId);
+      await token.save();
+    }
 
     const mailOptions = {
       to: user.email,
@@ -146,18 +153,13 @@ router.post("/resend", async (req, res) => {
       <h3 style="padding-top: 30px; padding-bottom: 10px">Kind Regards, Ketakinder<h3>`,
     };
 
-    if (token.token) {
-      sendMail(mailOptions);
-      res.status(200).json({ msg: "Success" });
-    } else {
-      const token = createEmailToken(token.uId);
-      await token.save();
-      sendMail(mailOptions);
-      res.status(200).json({ msg: "Success" });
-    }
+    sendMail(mailOptions);
+    res.status(200).json({ email: email });
   } catch (e) {
     console.log(e.message);
-    res.status(500).json({ error: e.message });
+    res
+      .status(500)
+      .json({ msg: "There was a problem processing your request" });
   }
 });
 

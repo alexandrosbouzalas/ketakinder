@@ -11,13 +11,12 @@ router.use(express.json());
 
 router.get("/:token", async (req, res) => {
   try {
-    const token = req.params.token;
-    const uId = await Token.findOne({ token: token });
+    const token = await Token.findOne({ token: req.params.token });
 
-    if (uId) {
+    if (token && token.for == "account") {
       const successText = "Thank you for verifying you account";
-      await User.updateOne({ uId: uId.uId }, { $set: { active: true } });
-      await Token.deleteOne({ token: token });
+      await User.updateOne({ uId: token.uId }, { $set: { active: true } });
+      await Token.deleteOne({ token: req.params.token });
       res.render("verify/verify", { title: title, text: successText });
     } else {
       const errorText = "The specified token in not valid or has expired.";

@@ -71,6 +71,7 @@ const verifySuccess = () => {
         icon: "success",
         allowOutsideClick: false,
         confirmButtonText: "OK",
+        background: "#f1f4f6",
         confirmButtonColor: "#007bff",
         width: "40%",
       }).then(() => {
@@ -83,6 +84,7 @@ const verifySuccess = () => {
         icon: "error",
         allowOutsideClick: false,
         confirmButtonText: "OK",
+        background: "#f1f4f6",
         confirmButtonColor: "#007bff",
         width: "40%",
       });

@@ -36,6 +36,7 @@ router.use(function (req, res, next) {
 function createPasswordToken(uId) {
   const token = new Token({
     token: generateToken(),
+    for: "password",
     uId: uId,
     expirationDate: addTime(new Date(), 30),
   });
@@ -123,7 +124,7 @@ router.get("/:token", async (req, res) => {
     try {
       const token = await Token.findOne({ token: req.params.token });
 
-      if (token) {
+      if (token && token.for == "password") {
         res.render("recover/recoveryform", { title: title });
       } else {
         const errorText = "The specified token in not valid or has expired.";
@@ -149,7 +150,7 @@ router.post("/:token", async (req, res) => {
 
       const token = await Token.findOne({ token: req.params.token });
 
-      if (token) {
+      if (token && token.for == "password") {
         await User.updateOne(
           { uId: token.uId },
           { $set: { password: await bcryptHash(password) } }

@@ -103,10 +103,12 @@ const verifySuccess = () => {
               data: JSON.stringify({ data: data }),
               success: function (response) {
                 Swal.fire({
-                  title: response.msg,
+                  title: `Registration email sent to ${response.email}.`,
+                  text: `If you don't see this email in your inbox within 15 minutes, look for it in your junk mail folder. If you findOne it there, please mark the email as “Not Junk”.`,
                   icon: "success",
                   allowOutsideClick: false,
                   confirmButtonText: "OK",
+                  background: "#f1f4f6",
                   confirmButtonColor: "#007bff",
                   width: "40%",
                 });
@@ -117,6 +119,7 @@ const verifySuccess = () => {
                   icon: "error",
                   allowOutsideClick: false,
                   confirmButtonText: "OK",
+                  background: "#f1f4f6",
                   confirmButtonColor: "#007bff",
                   width: "40%",
                 });
@@ -132,6 +135,7 @@ const verifySuccess = () => {
           showCloseButton: false,
           showCancelButton: false,
           showConfirmButton: false,
+          background: "#f1f4f6",
           width: "40%",
           timer: 3000,
         }).then(() => {
@@ -146,6 +150,7 @@ const verifySuccess = () => {
           icon: "error",
           allowOutsideClick: false,
           confirmButtonText: "OK",
+          background: "#f1f4f6",
           confirmButtonColor: "#007bff",
           width: "40%",
         });
@@ -155,6 +160,7 @@ const verifySuccess = () => {
           icon: "error",
           allowOutsideClick: false,
           confirmButtonText: "OK",
+          background: "#f1f4f6",
           confirmButtonColor: "#007bff",
           width: "40%",
         });

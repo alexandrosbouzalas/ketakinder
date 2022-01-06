@@ -7,6 +7,10 @@ const tokenSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    for: {
+      type: String,
+      required: true,
+    },
     uId: {
       type: String,
       required: true,

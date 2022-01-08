@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
   if (req.session.authenticated) {
     TeamSpeak.connect({
-      host: "ketakinder.tk",
+      host: "localhost",
       queryport: 10011,
       serverport: 9987,
       username: "serveradmin",

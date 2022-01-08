@@ -79,7 +79,7 @@ router.post("/", async (req, res) => {
             subject: "Recover your password",
             html: `<h2 style="padding: 20px 0px 10px 0px;">Hello ${user.username},</h2>
           <h3 style="padding-bottom: 20px;">follow the link bellow to recover your password.</h3> 
-          <a href="http://localhost:3000/recover/${token.token}" style="
+          <a href="https://ketakinder.tk/recover/${token.token}" style="
           display: block;
           width: 115px;
           height: 30px;
@@ -98,7 +98,7 @@ router.post("/", async (req, res) => {
             to: email,
             subject: "Recover your password",
             html: `<h3"> We received an account recovery request for ${email}, but that email does not exist in our records.
-          If you meant to sign up for Ketakinder, you can <a href="http://localhost:3000/register">sign up here</a>.</h3> 
+          If you meant to sign up for Ketakinder, you can <a href="https://ketakinder.tk/register">sign up here</a>.</h3> 
           <h3 style="padding-top: 20px; padding-bottom: 10px">Kind Regards, Ketakinder</h3>`,
           };
         }

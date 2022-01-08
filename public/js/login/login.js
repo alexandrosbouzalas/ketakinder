@@ -93,7 +93,7 @@ const verifySuccess = () => {
           confirmButtonText: "Resend activation email",
           cancelButtonText: "OK",
           confirmButtonColor: "#007bff",
-          width: "40%",
+          background: "#f1f4f6",
         }).then((result) => {
           if (result.isConfirmed) {
             $.ajax({
@@ -104,13 +104,12 @@ const verifySuccess = () => {
               success: function (response) {
                 Swal.fire({
                   title: `Registration email sent to ${response.email}.`,
-                  text: `If you don't see this email in your inbox within 15 minutes, look for it in your junk mail folder. If you findOne it there, please mark the email as “Not Junk”.`,
+                  text: `If you don't see this email in your inbox within 15 minutes, look for it in your junk mail folder. If you find it there, please mark the email as “Not Junk”.`,
                   icon: "success",
                   allowOutsideClick: false,
                   confirmButtonText: "OK",
                   background: "#f1f4f6",
                   confirmButtonColor: "#007bff",
-                  width: "40%",
                 });
               },
               error: function (err) {
@@ -121,7 +120,6 @@ const verifySuccess = () => {
                   confirmButtonText: "OK",
                   background: "#f1f4f6",
                   confirmButtonColor: "#007bff",
-                  width: "40%",
                 });
               },
             });
@@ -136,7 +134,6 @@ const verifySuccess = () => {
           showCancelButton: false,
           showConfirmButton: false,
           background: "#f1f4f6",
-          width: "40%",
           timer: 3000,
         }).then(() => {
           window.location = "/home";
@@ -152,7 +149,6 @@ const verifySuccess = () => {
           confirmButtonText: "OK",
           background: "#f1f4f6",
           confirmButtonColor: "#007bff",
-          width: "40%",
         });
       } catch {
         Swal.fire({
@@ -162,7 +158,6 @@ const verifySuccess = () => {
           confirmButtonText: "OK",
           background: "#f1f4f6",
           confirmButtonColor: "#007bff",
-          width: "40%",
         });
       }
     },

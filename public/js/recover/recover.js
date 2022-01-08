@@ -73,7 +73,6 @@ const verifySuccess = () => {
         confirmButtonText: "OK",
         background: "#f1f4f6",
         confirmButtonColor: "#007bff",
-        width: "40%",
       }).then(() => {
         window.location = "/";
       });
@@ -86,7 +85,6 @@ const verifySuccess = () => {
         confirmButtonText: "OK",
         background: "#f1f4f6",
         confirmButtonColor: "#007bff",
-        width: "40%",
       });
     },
   });

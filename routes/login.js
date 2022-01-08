@@ -6,7 +6,6 @@ const { validateEmail } = require("../public/js/utils");
 
 const router = express.Router();
 
-// Database user model
 const User = require("./../models/user");
 
 const title = "login";
@@ -35,7 +34,6 @@ router.post("/", async (req, res) => {
 
   try {
     const user = await User.findOne({ email: email });
-    const active = user.active;
 
     if (!validateEmail(email.toString())) throw new Error("Invalid email");
     if (!validatePassword(password.toString()))
@@ -46,6 +44,7 @@ router.post("/", async (req, res) => {
         res.json(req.session);
       } else {
         if (user) {
+          const active = user.active;
           const valid = await bcryptCompare(password, user);
           const username = user.username;
 
@@ -71,10 +70,12 @@ router.post("/", async (req, res) => {
       throw new Error("Missing parameters");
     }
   } catch (e) {
+    console.log(e.message);
     if (
       e.message.includes("Wrong") ||
       e.message.includes("not found") ||
-      e.message.includes("undefined")
+      e.message.includes("undefined") ||
+      e.message.includes("Invalid")
     ) {
       res.status(403).json({
         msg: "The email or password is incorrect.",

@@ -1,0 +1,50 @@
+.content {
+  padding: 0px 10px 10px 150px;
+  font-family: "Montserrat", sans-serif;
+  color: #fdfd96;
+  font-size: 60px;
+}
+
+ul {
+  list-style: none;
+}
+
+.flag-icon {
+  font-size: 20px;
+  vertical-align: middle;
+  padding: 0px 20px 0px 20px;
+}
+
+.fas {
+  font-size: 25px;
+  vertical-align: middle;
+  color: #d3d3d3;
+  padding: 0px 20px 0px 10px;
+}
+
+.primary {
+  font-family: "Poppins";
+  color: #fdfd96;
+  font-size: 20px;
+  padding: 25px 0px 5px 20px;
+}
+
+.secondary {
+  font-family: "Montserrat", sans-serif;
+  color: #d3d3d3;
+  padding-left: 20px;
+  font-size: 15px;
+}
+
+.client {
+  font-family: "Montserrat", sans-serif;
+  color: #d3d3d3;
+  padding: 5px 0px 6px 20px;
+  font-size: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+  .content {
+    padding: 20px 10px 10px 50px;
+  }
+}

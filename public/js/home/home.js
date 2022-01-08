@@ -82,7 +82,7 @@ $("#version").click(function (event) {
   event.preventDefault();
 });
 
-/* $.ajax({
+$.ajax({
   url: "/home",
   method: "POST",
   contentType: "application/json",
@@ -154,4 +154,3 @@ $("#version").click(function (event) {
     });
   },
 });
- */

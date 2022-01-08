@@ -87,7 +87,6 @@ $.ajax({
   method: "POST",
   contentType: "application/json",
   success: function (response) {
-    console.log(response);
     try {
       if (response.channels) {
         const channels = response.channels;

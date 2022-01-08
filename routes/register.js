@@ -86,7 +86,7 @@ router.post("/", async (req, res) => {
       subject: "Verify your account",
       html: `<h2 style="padding: 20px 0px 10px 0px;">Hello ${user.username},</h2>
       <h3 style="padding-bottom: 20px;">before being able to use your account you need to verify that this is your email address.</h3> 
-      <a href="http://localhost:3000/verify/${token.token}" style="
+      <a href="https://ketakinder.tk/verify/${token.token}" style="
       display: block;
       width: 115px;
       height: 30px;

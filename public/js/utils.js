@@ -24,7 +24,7 @@ module.exports = {
 
   validatePassword: function (password) {
     const rePassword =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+      /^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){2,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$/;
 
     if (password.toString().length < 8 || !rePassword.test(password))
       return false;

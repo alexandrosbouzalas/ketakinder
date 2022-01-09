@@ -6,7 +6,14 @@ $("#settings").click(function (event) {
     title: "Coming soon...",
     showConfirmButton: false,
     background: "#f1f4f6",
+    showClass: {
+      popup: "animate__animated animate__fadeInUp",
+    },
+    hideClass: {
+      popup: "animate__animated animate__fadeOutDown",
+    },
   });
+  event.preventDefault();
 });
 
 $("#support").click(function (event) {
@@ -88,23 +95,25 @@ $.ajax({
   contentType: "application/json",
   success: function (response) {
     try {
-      if (response.channels) {
+      if (response) {
         const channels = response.channels;
         const clients = response.clients;
 
-        channels.forEach((channel) => {
-          var channelType = "secondary";
+        if (channels.length !== 0) {
+          channels.forEach((channel) => {
+            var channelType = "secondary";
 
-          if (channel.channelCodecQuality === 0) channelType = "primary";
+            if (channel.channelCodecQuality === 0) channelType = "primary";
 
-          var channelElement = `<li class="${channelType}" id="${channel.cid}">${channel.channelName}</li>`;
+            var channelElement = `<li class="${channelType}" id="${channel.cid}">${channel.channelName}</li>`;
 
-          if (!channel.channelName.includes("[spacer")) {
-            $(".tsinfo").append(channelElement);
-          }
-        });
+            if (!channel.channelName.includes("[spacer")) {
+              $(".tsinfo").append(channelElement);
+            }
+          });
+        }
 
-        if (clients.length != 0) {
+        if (clients.length !== 0) {
           clients.forEach((client) => {
             if (client.clientDatabaseId == "46") client.clientCountry = "gr";
 

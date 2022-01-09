@@ -28,6 +28,7 @@ router.post("/", async (req, res) => {
         subject: "Support email",
         html: `<h1>The user ${username} is requesting support</h1
         <p>Message: ${message}</p>
+        <p>E-Mail: ${email}</p>
         <p>${currentDate}</p>`,
       };
 

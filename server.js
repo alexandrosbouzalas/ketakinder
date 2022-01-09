@@ -14,8 +14,8 @@ const verifyRouter = require("./routes/verify");
 const recoverRouter = require("./routes/recover");
 const supportRouter = require("./routes/support");
 
-const port = 80;
-const portHTTPS = 443;
+const port = 3000;
+
 const title = "index";
 
 const app = express();

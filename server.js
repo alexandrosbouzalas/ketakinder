@@ -13,6 +13,7 @@ const logoutRouter = require("./routes/logout");
 const verifyRouter = require("./routes/verify");
 const recoverRouter = require("./routes/recover");
 const supportRouter = require("./routes/support");
+const roomRouter = require("./routes/room");
 
 const port = 3000;
 
@@ -78,3 +79,4 @@ app.use("/logout", logoutRouter);
 app.use("/verify", verifyRouter);
 app.use("/recover", recoverRouter);
 app.use("/support", supportRouter);
+app.use("/room", roomRouter);

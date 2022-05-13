@@ -38,13 +38,36 @@ $('#search-btn').click(() => {
     if(inputString) {
 
         if(validateInputString(inputString)) {
+            
+            const data = inputString;
 
-            inputString = inputString.split('=');
+            $.ajax({
+                url: "/w2g",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ data: data }),
+                success: function (response) {
+                    window.location.href = `http://localhost:3000/w2g/room/${response}`
+                },
+                error: function (err) {
+                  Swal.fire({
+                    title: err.responseJSON.msg,
+                    icon: "error",
+                    allowOutsideClick: false,
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#007bff",
+                    background: "#f1f4f6",
+                    width: "50%",
+                  });
+                },
+              });
+
+/*          inputString = inputString.split('=');
             $('#video-player').attr('src', linkTemplate + inputString[inputString.length - 1]);
             $("#video-input").css("border", "none");
             $("#video-player-text").css("display", "none");
-            $("#video-player").css("display", "block");
-            
+            $("#video-player").css("display", "block");*/
+            $("#container").css("background-color", "#3f4450"); 
         } else {
             $("#video-input").css("border", "3px solid red");
         }

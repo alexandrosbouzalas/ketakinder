@@ -1,15 +1,99 @@
 .info {
-  text-align: center;
-  color: #fdfd96;
+  margin-bottom: 100px;
+}
+
+.container-main {
+  width: 85%;
+  background-color: #3f4450;
+  height: auto;
+  margin: auto;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   font-family: "Montserrat", sans-serif;
-  font-size: 50px;
-  height: 500px;
-  line-height: 500px;
+}
+
+#video-player {
+  display: none;
+  width: 100%;
+  height: 80vh;
+  margin: auto;
+  padding: 30px 0px 20px 0px;
+}
+
+#video-player-text {
+  color: #fdfd96;
+  font-size: 40px;
+  padding-top: 20px;
   text-align: center;
 }
 
-p {
-  display: inline-block;
+.video-player-container {
+  width: 95%;
+  margin: auto;
+}
+
+#platform-btn {
+  width: 40px;
+  height: 40px;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  display: block;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+#search-btn {
+  width: 40px;
+  height: 40px;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  display: block;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+button:focus {
+  outline: none;
+}
+
+#video-input {
+  background-color: rgb(211, 211, 211);
+  height: 40px;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  width: 40%;
+  padding-left: 10px;
+}
+
+#video-input:focus {
+  outline: none;
+
+}
+
+.fas {
+  font-size: 25px;
   vertical-align: middle;
-  line-height: normal;
+  color: #ff0000;
+  padding: 0px 20px 0px 10px;
+}
+
+#video-player-inputs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.error-label {
+  display: none;
+  color: red;
 }

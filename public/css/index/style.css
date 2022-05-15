@@ -1,6 +1,12 @@
+.container-main {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
 #welcomebanner {
-  padding: 200px 10px 10px 10px;
-  height: 700px;
   text-align: center;
   font-family: "Poppins";
   color: #fdfd96;

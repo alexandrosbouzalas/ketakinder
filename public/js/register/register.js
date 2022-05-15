@@ -1,6 +1,4 @@
-$("#second").remove();
-$("#first").attr("href", "/");
-$("#first").first().text("Home");
+
 
 $("#username").addClass("inputBorder inputBorderFocus");
 $("#email").addClass("inputBorder inputBorderFocus");

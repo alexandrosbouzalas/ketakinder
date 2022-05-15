@@ -11,15 +11,10 @@ const roomSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    /* expirationDate: {
-      type: Date,
-      expires: 0,
-      required: true,
-    },
     createdAt: {
       type: Date,
       default: Date.now(),
-    }, */
+    },
   },
   { timestamps: true }
 );

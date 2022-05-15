@@ -1,12 +1,12 @@
-.info {
-  margin-bottom: 100px;
-}
-
-#container {
-  background-color: transparent;
-}
-
 .container-main {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.room-creation-container {
   width: 85%;
   height: auto;
   margin: auto;
@@ -17,86 +17,48 @@
   font-family: "Montserrat", sans-serif;
 }
 
-#video-player {
-  display: none;
-  width: 100%;
-  height: 80vh;
-  margin: auto;
-  padding: 30px 0px 20px 0px;
+.arrow-button {
+  text-align: center;
+  font-size: 35px;
+  color: #fdfd96;
 }
 
-#video-player-text {
+.button-container {
+  margin: 30px 0px 30px 0px ;
+  width: 100%;
+}
+
+#w2g-text {
   color: #fdfd96;
   font-size: 40px;
   padding-top: 20px;
   text-align: center;
 }
 
-.video-player-container {
-  width: 95%;
+
+#room-creation-btn {
+  background-color: #d3d3d3;
+  color: black;
+  font-size: 20px;
+  width: 220px;
+  height: 50px;
+  border: 0px;
   margin: auto;
-}
-
-#platform-btn {
-  width: 40px;
-  height: 40px;
-  border: 0px;
-  margin: 0px;
   padding: 0px;
   display: block;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-radius: 10px;
+  font-family: 'Poppins';
+
+
 }
 
-#search-btn {
-  width: 40px;
-  height: 40px;
-  border: 0px;
-  margin: 0px;
-  padding: 0px;
-  display: block;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+#room-creation-btn:hover {
+  background-color: #fdfd96;
+  color: black;
+  transition: all 0.3s ;
 }
 
-button:hover {
-  opacity: 0.8;
-}
-
-button:focus {
+#room-creation-btn:focus {
   outline: none;
 }
 
-#video-input {
-  background-color: rgb(211, 211, 211);
-  height: 40px;
-  border: 0px;
-  margin: 0px;
-  padding: 0px;
-  width: 40%;
-  padding-left: 10px;
-}
-
-#video-input:focus {
-  outline: none;
-
-}
-
-.fas {
-  font-size: 25px;
-  vertical-align: middle;
-  color: #ff0000;
-  padding: 0px 20px 0px 10px;
-}
-
-#video-player-inputs {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.error-label {
-  display: none;
-  color: red;
-}

@@ -1,5 +1,13 @@
-.mask {
-  padding-bottom: 100px;
+.container-main {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card {
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .card {

@@ -1,5 +1,10 @@
-.info {
+.container-main {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
   color: #fdfd96;
   font-family: "Montserrat", sans-serif;
+
 }

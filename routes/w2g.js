@@ -4,6 +4,7 @@ const router = express.Router();
 const { validateInputUrl } = require("../public/js/utils");
 const { generateRoomToken } = require("../public/js/utils");
 const Room = require("../models/room");
+const User = require("../models/user");
 
 
 const title = "w2g";
@@ -13,10 +14,10 @@ router.use("./public/js/utils", validateInputUrl);
 router.use("./public/js/utils", generateRoomToken);
 
 
-function createRoom(roomId) {
+function createRoom(roomId, hostUId) {
   const room = new Room({
     roomId: roomId,
-    hostUId: 1000,
+    hostUId: hostUId,
   });
 
   return room;
@@ -44,11 +45,11 @@ router.get("/room/:roomId", async (req, res) => {
   if (req.session.authenticated) {
     let room = await Room.findOne({ roomId: req.params.roomId });
     if(room) {
-      res.render("room/room", { title: "room", url: `https://youtube.com/embed/fjZAgoxFKiQ`});
+      res.render("room/room", { title: "room" });
     } else {
       
-      const errorText = "The room link is invalid.";
-      res.render("verify/verify", { title: "verify", text: errorText });
+      const errorText = "The room link is invalid";
+      res.render("verify/verify", { text: errorText });
 
     }
   } else {
@@ -58,14 +59,10 @@ router.get("/room/:roomId", async (req, res) => {
 
 router.post("/", async (req, res) => {
   if (req.session.authenticated) {
-    const inputUrl = req.body.data;
-    
-    if(validateInputUrl(inputUrl)) {
 
-      // The url that is inputed in the room creation field is temporariliy stored in this variable and passed along
-      // with the room redirection
+      const user = await User.findOne({ username: req.session.user.username});
 
-      roomRedirectionLink = inputUrl.split("=");
+      const hostUId = user.uId;
 
       let roomId = generateRoomToken();
 
@@ -78,7 +75,7 @@ router.post("/", async (req, res) => {
       
 
       try {
-        const room = createRoom(roomId);
+        const room = createRoom(roomId, hostUId);
 
         try {
           await room.save();
@@ -89,17 +86,11 @@ router.post("/", async (req, res) => {
         }
 
       }
-      catch {
-        console.log("There was an error creating the room");
+      catch(e) {
+        console.log(`There was an error creating the room: ${e.message}`);
       }
-
-
-    } else {
-      res.send("Url is Invalid!").status(200);
-    }
-    
   } else {
-    res.send("Error").status(403);
+    res.send("Not authenticated").status(403);
   }
 })
 

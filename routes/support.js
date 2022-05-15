@@ -4,8 +4,6 @@ const { validateEmail } = require("../public/js/utils");
 
 const User = require("./../models/user");
 
-const title = "support";
-
 const router = express.Router();
 
 router.use(express.json());

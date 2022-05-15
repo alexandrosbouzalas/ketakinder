@@ -26,7 +26,6 @@ $("#support").click(function (event) {
     },
     showCancelButton: true,
     confirmButtonText: "Send",
-    showLoaderOnConfirm: true,
     input: "textarea",
     inputPlaceholder: "Type your message here...",
     showCancelButton: true,
@@ -41,33 +40,35 @@ $("#support").click(function (event) {
     },
   }).then((result) => {
     if (result.isConfirmed) {
-      $.ajax({
-        url: "/support",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ data: result.value.toString() }),
-        success: function (response) {
-          Swal.fire({
-            title: "Thank you!",
-            text: "We will reach out to you as soon as possible.",
-            icon: "success",
-            allowOutsideClick: false,
-            confirmButtonText: "OK",
-            background: "#f1f4f6",
-            confirmButtonColor: "#007bff",
-          });
-        },
-        error: function (err) {
-          Swal.fire({
-            title: err.responseJSON.msg,
-            icon: "error",
-            allowOutsideClick: false,
-            confirmButtonText: "OK",
-            background: "#f1f4f6",
-            confirmButtonColor: "#007bff",
-          });
-        },
-      });
+      if (result.value.toString().trim() != "") {
+        $.ajax({
+          url: "/support",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ data: result.value.toString() }),
+          success: function (response) {
+            Swal.fire({
+              title: "Thank you!",
+              text: "We will reach out to you as soon as possible.",
+              icon: "success",
+              allowOutsideClick: false,
+              confirmButtonText: "OK",
+              background: "#f1f4f6",
+              confirmButtonColor: "#007bff",
+            });
+          },
+          error: function (err) {
+            Swal.fire({
+              title: err.responseJSON.msg,
+              icon: "error",
+              allowOutsideClick: false,
+              confirmButtonText: "OK",
+              background: "#f1f4f6",
+              confirmButtonColor: "#007bff",
+            });
+          },
+        });
+      }
     }
   });
   event.preventDefault();

@@ -26,16 +26,20 @@ module.exports = {
     const rePassword =
       /^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){2,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$/;
 
-    if (password.toString().length < 8 || !rePassword.test(password))
+    if (
+      password.toString().length < 8 ||
+      !rePassword.test(password.toString().trim())
+    )
       return false;
     else return true;
   },
 
   validateUsername: function (username) {
+    
     const reUsername =
       /^[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){2,18}[a-zA-Z0-9]$/;
 
-    if (!reUsername.test(username)) return false;
+    if (!reUsername.test(username.toString().trim())) return false;
     else return true;
   },
 
@@ -43,7 +47,7 @@ module.exports = {
     const reEmail =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (!reEmail.test(email)) return false;
+    if (!reEmail.test(email.toString().trim())) return false;
     else return true;
   },
 };

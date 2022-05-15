@@ -65,7 +65,14 @@ router.post("/", async (req, res) => {
 
   if (usernameCount.length != 0) count = usernameCount[0].username;
 
-  const uId = Math.floor(count + Math.random() * 9000).toString();
+  let uId = Math.floor(count + Math.random() * 9000).toString();
+
+  let uIdExists = await User.findOne({ uId: uId });
+
+  while (uIdExists) {
+    uId = Math.floor(count + Math.random() * 9000).toString();
+    uIdExists = await User.findOne({ uId: uId });
+  }
 
   const user = new User({
     username: username,

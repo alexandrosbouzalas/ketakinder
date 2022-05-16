@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const redis = require("redis");
+const redisPort = process.env.port || 6379;
+const redisClient = redis.createClient(redisPort);
+
 const { validateInputUrl } = require("../public/js/utils");
 const { generateRoomToken } = require("../public/js/utils");
 const Room = require("../models/room");
@@ -44,8 +48,23 @@ router.get("/room", (req, res) => {
 router.get("/room/:roomId", async (req, res) => {
   if (req.session.authenticated) {
     let room = await Room.findOne({ roomId: req.params.roomId });
+
     if(room) {
-      res.render("room/room", { title: "room" });
+      redisClient.get(room.roomId, (err, response) => {
+        if (err) throw new Error(err);
+        else if (response) {
+  
+  
+          res.render("room/room", { url: response });
+  
+  
+        } else {
+          console.log("No data received");
+          res.render("room/room", { url: "" });
+
+  
+        }
+      });
     } else {
       
       const errorText = "The room link is invalid";
@@ -93,6 +112,20 @@ router.post("/", async (req, res) => {
     res.send("Not authenticated").status(403);
   }
 })
+
+router.post("/room/:roomId", async (req, res) => {
+  if (req.session.authenticated) {
+    if(req.body.data.roomId && req.body.data.roomId) {
+
+      redisClient.set(req.body.data.roomId, req.body.data.url);
+    }
+
+
+  } else {
+    res.redirect("/");
+  }
+});
+
 
 
 module.exports = router;

@@ -1,10 +1,12 @@
 $('#room-creation-btn').on('click', () => {
+
     $.ajax({
         url: "/w2g",
         method: "POST",
         contentType: "application/json",
         success: function (response) {
-            window.location.href = `http://localhost:3000/w2g/room/${response}`
+
+            window.location.pathname = `/w2g/room/${response}`
         },
         error: function (err) {
           Swal.fire({
@@ -19,3 +21,5 @@ $('#room-creation-btn').on('click', () => {
         },
     });
 })
+
+

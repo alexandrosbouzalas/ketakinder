@@ -63,14 +63,6 @@ app.get("/", (req, res) => {
   else res.render("index/index", { title: title });
 });
 
-try {
-  app.listen(3000);
-  console.info(`Listening on: https://ketakinder.tk`);
-} catch (e) {
-  console.log("There was an error starting the app");
-  console.log(e.message);
-}
-
 app.use("/w2g", w2gRouter);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
@@ -80,3 +72,26 @@ app.use("/verify", verifyRouter);
 app.use("/recover", recoverRouter);
 app.use("/support", supportRouter);
 app.use("/room", roomRouter);
+
+
+
+try {
+
+  const server = app.listen(3000)
+
+  const io = require('socket.io')(server);
+
+  io.sockets.on('connection', function (socket) {
+    console.log("Client connected")
+
+    //Whenever someone disconnects this piece of code executed
+    socket.on('disconnect', function () {
+      console.log('Client disconnected');
+    });
+  });
+
+  console.info(`Listening on: https://ketakinder.tk`);
+} catch (e) {
+  console.log("There was an error starting the app");
+  console.log(e.message);
+}

@@ -55,7 +55,7 @@
       <div class="container-secondary" id="container">
         <div class="video-player-container">
           <p id="video-player-text">Insert your link below</p>
-          <iframe id="video-player" src="<%= url%>" title="W2G Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe class="youtube-video" id="video-player" src="<%= url%>" title="W2G Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div id="video-player-inputs">
           <button type="submit" title="Redirect to current video (YouTube)" id="platform-btn"><i class="fa-brands fa-youtube"></i></button>
@@ -70,11 +70,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/js/global.js"></script>
+  <script src = "/socket.io/socket.io.js"></script>
   <script src="/js/w2g/room/room.js"></script>
   <script src="https://kit.fontawesome.com/4e5b8d4118.js" crossorigin="anonymous"></script>
-  <script src = "/socket.io/socket.io.js"></script>
-   
-   <script>
-      const socket = io();
-   </script>
 </html>

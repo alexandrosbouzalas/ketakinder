@@ -1,3 +1,4 @@
+
 function validateInputString(input) {
 
 
@@ -31,10 +32,11 @@ $('#platform-btn').click(() => {
     }
 })
 
+
 function updateVideo(inputString, roomId) {
 
     const data = {
-        url: "https://www.youtube.com/embed/" + inputString, 
+        url: "https://www.youtube.com/embed/" + inputString + "?enablejsapi=1&version=3&playerapiid=ytplayer?autoplay=1", 
         roomId: roomId
     }
 
@@ -72,7 +74,7 @@ $('#search-btn').click(() => {
             // Grab the youtube url
             inputString = inputString.substring(inputString.length - 11, inputString.length);
 
-            $('#video-player').attr('src', linkTemplate + inputString);
+            $('#video-player').attr('src', linkTemplate + inputString + "?enablejsapi=1&version=3&playerapiid=ytplayer?autoplay=1");
             $("#video-input").css("border", "none");
             $("#video-player-text").css("display", "none");
             $("#video-player").css("display", "block");
@@ -92,3 +94,25 @@ $(document).keydown(function(event) {
         $('#search-btn').trigger('click');
     }
 })
+
+function playVideo() {
+	$('.youtube-video')[0].contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', '*');
+};
+
+function stopVideo() {
+	$('.youtube-video')[0].contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
+};
+
+function pauseVideo() {
+	$('.youtube-video')[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+};
+
+const socket = io();
+
+// send a message to the server
+socket.emit("hello from client", 5, "6", { 7: Uint8Array.from([8]) });
+  
+// receive a message from the server
+socket.on("hello from server", (args) => {
+   playVideo();
+});

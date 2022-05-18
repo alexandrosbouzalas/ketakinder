@@ -53,16 +53,18 @@ router.get("/room/:roomId", async (req, res) => {
       redisClient.get(room.roomId, (err, response) => {
         if (err) throw new Error(err);
         else if (response) {
-  
+          
   
           res.render("room/room", { url: response });
-  
+          
+          const io = req.app.get('socketio');
+
+          io.sockets.emit("hello from server", 1, "2", { 3: Buffer.from([4]) });
   
         } else {
           console.log("No data received");
           res.render("room/room", { url: "" });
-
-  
+          
         }
       });
     } else {
@@ -115,10 +117,16 @@ router.post("/", async (req, res) => {
 
 router.post("/room/:roomId", async (req, res) => {
   if (req.session.authenticated) {
-    if(req.body.data.roomId && req.body.data.roomId) {
-
+    if(req.body.data.roomId && req.body.data.url) {
       redisClient.set(req.body.data.roomId, req.body.data.url);
     }
+
+    
+
+
+    // Play/Pause/Stop youtube iframe code sample
+    //https://codepen.io/briangelhaus/pen/meeLRO
+
 
 
   } else {

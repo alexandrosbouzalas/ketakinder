@@ -15,6 +15,8 @@ const recoverRouter = require("./routes/recover");
 const supportRouter = require("./routes/support");
 const roomRouter = require("./routes/room");
 
+const Room = require("./models/room");
+
 const port = 3000;
 
 const title = "index";
@@ -74,6 +76,26 @@ app.use("/support", supportRouter);
 app.use("/room", roomRouter);
 
 
+async function deleteRoom(socket) {
+
+  const refererUrl = socket.handshake.headers.referer;
+
+  const roomId = refererUrl.substring(refererUrl.length - 6, refererUrl.length) ;
+
+  try {
+    const room = await Room.findOne({ roomId: roomId });
+
+    if (room) {
+      await room.deleteOne({ roomId: roomId });
+      console.log('Room deleted successfully');
+
+    } else {
+      console.log("Room does not exist or has been deleted");
+    }
+  } catch (e) {
+    console.log(e.message);
+  }
+}
 
 try {
 
@@ -81,14 +103,27 @@ try {
 
   const io = require('socket.io')(server);
 
+  app.set('socketio', io);
+
   io.sockets.on('connection', function (socket) {
     console.log("Client connected")
 
-    //Whenever someone disconnects this piece of code executed
+    // Whenever someone disconnects this piece of code executed
     socket.on('disconnect', function () {
       console.log('Client disconnected');
+
+    
+      // If the last user disconnects from the room, delete it.
+      /* if(io.engine.clientsCount == 0) {
+
+        deleteRoom(socket);
+
+      } */
+
     });
+
   });
+
 
   console.info(`Listening on: https://ketakinder.tk`);
 } catch (e) {

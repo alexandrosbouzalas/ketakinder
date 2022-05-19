@@ -36,7 +36,7 @@ $('#platform-btn').click(() => {
 function updateVideo(inputString, roomId) {
 
     const data = {
-        url: "https://www.youtube.com/embed/" + inputString + "?enablejsapi=1&version=3&playerapiid=ytplayer?autoplay=1", 
+        url: "https://www.youtube.com/embed/" + inputString + "?&autoplay=1&mute=1&enablejsapi=1&version=3&playerapiid=ytplayer", 
         roomId: roomId
     }
 
@@ -74,7 +74,7 @@ $('#search-btn').click(() => {
             // Grab the youtube url
             inputString = inputString.substring(inputString.length - 11, inputString.length);
 
-            $('#video-player').attr('src', linkTemplate + inputString + "?enablejsapi=1&version=3&playerapiid=ytplayer?autoplay=1");
+            $('#video-player').attr('src', linkTemplate + inputString + "?&autoplay=1&mute=1&enablejsapi=1&version=3&playerapiid=ytplayer");
             $("#video-input").css("border", "none");
             $("#video-player-text").css("display", "none");
             $("#video-player").css("display", "block");

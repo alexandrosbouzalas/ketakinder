@@ -54,18 +54,22 @@
     <div class="container-main">
       <div class="container-secondary" id="container">
         <div class="video-player-container">
-          <p id="video-player-text">Insert your link below</p>
+          <div id="info-content">
+            <p id="video-player-text">Insert your link below</p>
+            <div class="arrow-icon">
+              <i class="fa-solid fa-arrow-down"></i>
+            </div>
+          </div>
           <iframe class="youtube-video" id="video-player" src="<%= url%>" title="W2G Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div id="video-player-inputs">
           <button type="submit" title="Redirect to current video (YouTube)" id="platform-btn"><i class="fa-brands fa-youtube"></i></button>
           <input id="video-input" type="text" placeholder="Insert YouTube Link here..."></input>
+          
           <button type="submit" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
       </div>
     </div>
-    <br>
-    <br>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

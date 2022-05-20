@@ -1,3 +1,7 @@
+var iframe = document.getElementById('video-player');
+
+
+
 
 function validateInputString(input) {
 
@@ -14,7 +18,8 @@ function validateInputString(input) {
 
 if($('#video-player')[0].src.trim() != window.location.href) {
     $("#video-player").css("display", "block");
-    $("#video-player-text").css("display", "none");
+    $("#info-content").css("display", "none");
+
 }
 
 $('#platform-btn').click(() => {
@@ -36,9 +41,10 @@ $('#platform-btn').click(() => {
 function updateVideo(inputString, roomId) {
 
     const data = {
-        url: "https://www.youtube.com/embed/" + inputString + "?&autoplay=1&mute=1&enablejsapi=1&version=3&playerapiid=ytplayer", 
+        url: "https://www.youtube.com/embed/" + inputString + "?&controls=0&enablejsapi=1&version=3&playerapiid=ytplayer", 
         roomId: roomId
     }
+
 
     $.ajax({
         url: window.location.pathname,
@@ -60,6 +66,7 @@ function updateVideo(inputString, roomId) {
 
 }
 
+
 $('#search-btn').click(() => {
 
     let inputString = $('#video-input').val().toString();
@@ -74,10 +81,10 @@ $('#search-btn').click(() => {
             // Grab the youtube url
             inputString = inputString.substring(inputString.length - 11, inputString.length);
 
-            $('#video-player').attr('src', linkTemplate + inputString + "?&autoplay=1&mute=1&enablejsapi=1&version=3&playerapiid=ytplayer");
+            $('#video-player').attr('src', linkTemplate + inputString + "?&controls=0&enablejsapi=1&version=3&playerapiid=ytplayer");
             $("#video-input").css("border", "none");
-            $("#video-player-text").css("display", "none");
             $("#video-player").css("display", "block");
+            $("#info-content").css("display", "none");
 
             updateVideo(inputString, roomId)
 
@@ -99,6 +106,10 @@ function playVideo() {
 	$('.youtube-video')[0].contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', '*');
 };
 
+function unMute() {
+	$('.youtube-video')[0].contentWindow.postMessage('{"event":"command","func":"' + 'unMute' + '","args":""}', '*');
+};
+
 function stopVideo() {
 	$('.youtube-video')[0].contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
 };
@@ -106,6 +117,13 @@ function stopVideo() {
 function pauseVideo() {
 	$('.youtube-video')[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
 };
+
+function muteVideo() {
+	$('.youtube-video')[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+};
+
+
+iframe.addEventListener('load', function() { playVideo(); });
 
 const socket = io();
 

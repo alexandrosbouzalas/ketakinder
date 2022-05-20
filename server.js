@@ -87,7 +87,6 @@ async function deleteRoom(socket) {
 
     if (room) {
       await room.deleteOne({ roomId: roomId });
-      console.log('Room deleted successfully');
 
     } else {
       console.log("Room does not exist or has been deleted");
@@ -114,11 +113,17 @@ try {
 
     
       // If the last user disconnects from the room, delete it.
-      /* if(io.engine.clientsCount == 0) {
+      if(io.engine.clientsCount == 0) {
 
-        deleteRoom(socket);
-
-      } */
+        setTimeout(() => {
+          
+          // Checking again after a 5 seconds before deleting , so the room is not deleted when the page is refreshed
+          if(io.engine.clientsCount == 0) {
+            deleteRoom(socket);
+            console.log('Room deleted')
+          }
+        }, 5000)
+      }
 
     });
 

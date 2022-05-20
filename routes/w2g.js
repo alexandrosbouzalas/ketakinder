@@ -62,7 +62,6 @@ router.get("/room/:roomId", async (req, res) => {
           io.sockets.emit("hello from server", 1, "2", { 3: Buffer.from([4]) });
   
         } else {
-          console.log("No data received");
           res.render("room/room", { url: "" });
           
         }
@@ -115,19 +114,28 @@ router.post("/", async (req, res) => {
   }
 })
 
+function validateInputString(input) {
+  const reInputString = /^(https:\/\/([w]{3}\.)?youtu(be)?\.(com|de|be)\/(watch\?v=)?)?[a-zA-Z0-9_-]{11}$/;
+
+  if (reInputString.test(input) ) {
+      return true;
+  } else {
+      return false;
+  }
+}
+
 router.post("/room/:roomId", async (req, res) => {
   if (req.session.authenticated) {
+    /* if((req.body.data.roomId && req.body.data.url) && validateInputString(req.body.data.url)) {
+
+      redisClient.set(req.body.data.roomId, req.body.data.url);
+    } */
+
+
     if(req.body.data.roomId && req.body.data.url) {
+
       redisClient.set(req.body.data.roomId, req.body.data.url);
     }
-
-    
-
-
-    // Play/Pause/Stop youtube iframe code sample
-    //https://codepen.io/briangelhaus/pen/meeLRO
-
-
 
   } else {
     res.redirect("/");

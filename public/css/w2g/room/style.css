@@ -61,10 +61,22 @@
   display: block;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  outline: none;
 }
+
+.arrow-icon {
+  text-align: center;
+  font-size: 35px;
+  color: #fdfd96;
+}
+
 
 button:hover {
   opacity: 0.8;
+}
+
+input::placeholder {
+  color: black;
 }
 
 button:focus {

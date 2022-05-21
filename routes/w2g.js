@@ -17,6 +17,15 @@ router.use(express.json());
 router.use("./public/js/utils", validateInputUrl);
 router.use("./public/js/utils", generateRoomToken);
 
+function validateInputString(input) {
+  const reInputString = /^(https:\/\/([w]{3}\.)?youtu(be)?\.(com|de|be)\/(watch\?v=)?)?[a-zA-Z0-9_-]{11}$/;
+
+  if (reInputString.test(input) ) {
+      return true;
+  } else {
+      return false;
+  }
+}
 
 function createRoom(roomId, hostUId) {
   const room = new Room({
@@ -27,6 +36,25 @@ function createRoom(roomId, hostUId) {
   return room;
 }
 
+async function deleteRoom(socket) {
+
+  const refererUrl = socket.handshake.headers.referer;
+
+  const roomId = refererUrl.substring(refererUrl.length - 6, refererUrl.length) ;
+
+  try {
+    const room = await Room.findOne({ roomId: roomId });
+
+    if (room) {
+      await room.deleteOne({ roomId: roomId });
+
+    } else {
+      console.log("Room does not exist or has been deleted");
+    }
+  } catch (e) {
+    console.log(e.message);
+  }
+}
 
 router.get("/", (req, res) => {
   if (req.session.authenticated) {
@@ -36,46 +64,6 @@ router.get("/", (req, res) => {
   }
 });
 
-router.get("/room", (req, res) => {
-  if (req.session.authenticated) {
-    res.render("room/room", { title: title });
-  } else {
-    res.redirect("/");
-  }
-  
-});
-
-router.get("/room/:roomId", async (req, res) => {
-  if (req.session.authenticated) {
-    let room = await Room.findOne({ roomId: req.params.roomId });
-
-    if(room) {
-      redisClient.get(room.roomId, (err, response) => {
-        if (err) throw new Error(err);
-        else if (response) {
-          
-  
-          res.render("room/room", { url: response });
-          
-          const io = req.app.get('socketio');
-
-          io.sockets.emit("hello from server", 1, "2", { 3: Buffer.from([4]) });
-  
-        } else {
-          res.render("room/room", { url: "" });
-          
-        }
-      });
-    } else {
-      
-      const errorText = "The room link is invalid";
-      res.render("verify/verify", { text: errorText });
-
-    }
-  } else {
-    res.redirect("/");
-  }
-});
 
 router.post("/", async (req, res) => {
   if (req.session.authenticated) {
@@ -91,8 +79,7 @@ router.post("/", async (req, res) => {
       while(room) {
         let roomId = generateRoomToken();
         room = await Room.findOne({ roomId: roomId });
-      }
-      
+      }  
 
       try {
         const room = createRoom(roomId, hostUId);
@@ -114,15 +101,40 @@ router.post("/", async (req, res) => {
   }
 })
 
-function validateInputString(input) {
-  const reInputString = /^(https:\/\/([w]{3}\.)?youtu(be)?\.(com|de|be)\/(watch\?v=)?)?[a-zA-Z0-9_-]{11}$/;
 
-  if (reInputString.test(input) ) {
-      return true;
+router.get("/room", (req, res) => {
+  res.redirect("/w2g");
+});
+
+router.get("/room/:roomId", async (req, res) => {
+  if (req.session.authenticated) {
+
+    const io = req.app.get('socketio');
+
+    let room = await Room.findOne({ roomId: req.params.roomId });
+
+    if(room) {
+      redisClient.get(room.roomId, (err, response) => {
+        if (err) throw new Error(err);
+        else if (response) {
+          
+          res.render("room/room", { url: response });
+  
+        } else {
+          res.render("room/room", { url: "" });
+          
+        }
+      });
+    } else {
+      
+      const errorText = "The room link is invalid";
+      res.render("verify/verify", { text: errorText });
+
+    }
   } else {
-      return false;
+    res.redirect("/");
   }
-}
+});
 
 router.post("/room/:roomId", async (req, res) => {
   if (req.session.authenticated) {

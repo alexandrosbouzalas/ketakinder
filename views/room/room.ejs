@@ -62,10 +62,13 @@
           </div>
           <iframe class="youtube-video" id="video-player" src="<%= url%>" title="W2G Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
+        <div class="control-button-container" id="button-container">
+          <button class="control-btn" id="play-pause-btn"><i class="fa-solid fa-pause"></i></button>
+          <button class="control-btn" id="mute-unmute-btn"><i class="fa-solid fa-volume-high"></i></button>
+        </div>
         <div id="video-player-inputs">
           <button type="submit" title="Redirect to current video (YouTube)" id="platform-btn"><i class="fa-brands fa-youtube"></i></button>
           <input id="video-input" type="text" placeholder="Insert YouTube Link here..."></input>
-          
           <button type="submit" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
       </div>

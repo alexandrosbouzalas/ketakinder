@@ -1,7 +1,7 @@
 
 
 .container-main {
-  height: 70vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -115,4 +115,27 @@ button:focus {
 .error-label {
   display: none;
   color: red;
+}
+
+
+.control-button-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.control-btn {
+  height: 50px;
+  width: 50px;
+  background-color: #fdfd96;
+  border-radius: 15px;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  margin: 0px 10px 0px 10px;
+}
+
+#button-container {
+  display: none;
 }

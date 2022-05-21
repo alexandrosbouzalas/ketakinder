@@ -104,34 +104,48 @@ try {
 
   app.set('socketio', io);
 
+  let videoStatus = 'playing';
+
   io.sockets.on('connection', function (socket) {
     console.log("Client connected")
+
+    socket.on('statusCheck', function(args) {
+      socket.emit('videoStatus', videoStatus);
+    });
+
+    socket.on('playVideo', function (args){
+      videoStatus = 'playing';
+      socket.broadcast.emit('playVideo');
+    });
+    
+    socket.on('pauseVideo', function (args){
+      videoStatus = 'paused';
+      socket.broadcast.emit('pauseVideo');
+    });
 
     // Whenever someone disconnects this piece of code executed
     socket.on('disconnect', function () {
       console.log('Client disconnected');
-
     
       // If the last user disconnects from the room, delete it.
-      if(io.engine.clientsCount == 0) {
+      if(io.eio.clientsCount === 0) {
 
         setTimeout(() => {
           
-          // Checking again after a 5 seconds before deleting , so the room is not deleted when the page is refreshed
-          if(io.engine.clientsCount == 0) {
+          // Checking again after 5 seconds before deleting, so the room is not deleted when the page is refreshed
+          if(io.eio.clientsCount === 0) {
             deleteRoom(socket);
             console.log('Room deleted')
           }
         }, 5000)
       }
-
     });
-
   });
 
-
   console.info(`Listening on: https://ketakinder.tk`);
+
 } catch (e) {
+  
   console.log("There was an error starting the app");
   console.log(e.message);
 }

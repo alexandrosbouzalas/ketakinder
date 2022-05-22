@@ -36,25 +36,6 @@ function createRoom(roomId, hostUId) {
   return room;
 }
 
-async function deleteRoom(socket) {
-
-  const refererUrl = socket.handshake.headers.referer;
-
-  const roomId = refererUrl.substring(refererUrl.length - 6, refererUrl.length) ;
-
-  try {
-    const room = await Room.findOne({ roomId: roomId });
-
-    if (room) {
-      await room.deleteOne({ roomId: roomId });
-
-    } else {
-      console.log("Room does not exist or has been deleted");
-    }
-  } catch (e) {
-    console.log(e.message);
-  }
-}
 
 router.get("/", (req, res) => {
   if (req.session.authenticated) {
@@ -109,27 +90,13 @@ router.get("/room", (req, res) => {
 router.get("/room/:roomId", async (req, res) => {
   if (req.session.authenticated) {
 
-    const io = req.app.get('socketio');
-
     let room = await Room.findOne({ roomId: req.params.roomId });
 
     if(room) {
-      redisClient.get(room.roomId, (err, response) => {
-        if (err) throw new Error(err);
-        else if (response) {
-          
-          res.render("room/room", { url: response });
-  
-        } else {
-          res.render("room/room", { url: "" });
-          
-        }
-      });
+      res.render("room/room")
     } else {
-      
       const errorText = "The room link is invalid";
       res.render("verify/verify", { text: errorText });
-
     }
   } else {
     res.redirect("/");
@@ -138,16 +105,26 @@ router.get("/room/:roomId", async (req, res) => {
 
 router.post("/room/:roomId", async (req, res) => {
   if (req.session.authenticated) {
-    /* if((req.body.data.roomId && req.body.data.url) && validateInputString(req.body.data.url)) {
 
-      redisClient.set(req.body.data.roomId, req.body.data.url);
-    } */
-
-
-    if(req.body.data.roomId && req.body.data.url) {
-
-      redisClient.set(req.body.data.roomId, req.body.data.url);
+    if(req.body.data.action === "fetch") {
+      redisClient.get(req.body.data.roomId, (err, response) => {
+        if (err) throw new Error(err);
+        else if (response) {
+          res.send(response).status(200);
+        } else {
+          console.log("No data found for room " + req.body.data.roomId);
+        }
+      });
+    } else if(req.body.data.action === "update") {
+      if((req.body.data.roomId && req.body.data.url) && validateInputString(req.body.data.url)) {
+        try {
+          redisClient.set(req.body.data.roomId, req.body.data.url);
+        } catch(e) {
+          throw new Error("Can't update url field: " + e.message);
+        }
+      }
     }
+
 
   } else {
     res.redirect("/");

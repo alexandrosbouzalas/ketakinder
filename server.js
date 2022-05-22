@@ -126,14 +126,14 @@ try {
     // Whenever someone disconnects this piece of code executed
     socket.on('disconnect', function () {
       console.log('Client disconnected');
-    
+
       // If the last user disconnects from the room, delete it.
-      if(io.eio.clientsCount === 0) {
+      if(socket.server.eio.clientsCount === 0) {
 
         setTimeout(() => {
           
-          // Checking again after 5 seconds before deleting, so the room is not deleted when the page is refreshed
-          if(io.eio.clientsCount === 0) {
+          // Checking again after 1 minute before deleting, so the room is not deleted when the page is refreshed
+          if(socket.server.eio.clientsCount === 0) {
             deleteRoom(socket);
             console.log('Room deleted')
           }

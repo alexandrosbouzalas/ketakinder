@@ -104,24 +104,20 @@ try {
 
   app.set('socketio', io);
 
-  let videoStatus = 'playing';
-
   io.sockets.on('connection', function (socket) {
     console.log("Client connected")
 
-    socket.on('statusCheck', function(args) {
-      socket.emit('videoStatus', videoStatus);
-    });
-
     socket.on('playVideo', function (args){
-      videoStatus = 'playing';
       socket.broadcast.emit('playVideo');
     });
     
     socket.on('pauseVideo', function (args){
-      videoStatus = 'paused';
       socket.broadcast.emit('pauseVideo');
     });
+
+    socket.on('videoUrlChange', function (args) {
+      socket.broadcast.emit('videoUrlChange', args);
+    })
 
     // Whenever someone disconnects this piece of code executed
     socket.on('disconnect', function () {

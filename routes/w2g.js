@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const useragent = require('express-useragent');
 
 const redis = require("redis");
 const redisPort = process.env.port || 6379;
@@ -14,6 +15,7 @@ const User = require("../models/user");
 const title = "w2g";
 
 router.use(express.json());
+router.use(useragent.express());
 router.use("./public/js/utils", validateInputUrl);
 router.use("./public/js/utils", generateRoomToken);
 
@@ -40,8 +42,12 @@ function createRoom(roomId, hostUId) {
 router.get("/", (req, res) => {
   if (req.session.authenticated) {
 
-    console.log(req)
-    res.render("w2g/w2g", { title: title });
+    if(req.useragent.isMobile) {
+      const errorText = "Watch2Gether isn't supported on mobile devices";
+      res.render("verify/verify", { text: errorText });
+    } else {
+      res.render("w2g/w2g", { title: title });
+    }
   } else {
     res.redirect("/");
   }
@@ -91,15 +97,20 @@ router.get("/room", (req, res) => {
 
 router.get("/room/:roomId", async (req, res) => {
   if (req.session.authenticated) {
-
-    let room = await Room.findOne({ roomId: req.params.roomId });
-
-    if(room) {
-      res.render("room/room")
-    } else {
-      const errorText = "The room link is invalid";
+    if(req.useragent.isMobile) {
+      const errorText = "Watch2Gether isn't supported on mobile devices";
       res.render("verify/verify", { text: errorText });
+    } else {
+      let room = await Room.findOne({ roomId: req.params.roomId });
+  
+      if(room) {
+        res.render("room/room")
+      } else {
+        const errorText = "The room link is invalid";
+        res.render("verify/verify", { text: errorText });
+      }
     }
+
   } else {
     res.redirect("/");
   }

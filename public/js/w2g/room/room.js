@@ -1,12 +1,10 @@
-/* $('#copy-text')[0].placeholder = window.location.href;
-
 
 const roomId = window.location.pathname.substring(window.location.pathname.length - 6, window.location.pathname.length)
 const socket = io();
 
 // This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
-          
+
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -14,6 +12,7 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 // This function creates an <iframe> (and YouTube player)
 var player;
 let forwardingInterval
+$('#copy-text')[0].placeholder = window.location.href;
 
 
 function calculateTimeFormat(duration)
@@ -44,7 +43,7 @@ function initSliderAndTime() {
     
         $('#end-time')[0].innerText = calculateTimeFormat(durationInSeconds);
         
-    }, 1000)
+    }, 1000);
 
 }
 
@@ -265,6 +264,7 @@ $('#search-btn').click(() => {
 
             loadNewVideo(inputString, true);
             updateVideoUrl(inputString, roomId);
+            socket.emit('videoUrlChange', inputString);
 
         } else {
             $("#video-input").css("border", "3px solid red");
@@ -292,6 +292,8 @@ $('#time-slider').change(() => {
             updateSliderAndTime()
         }, 100);
     }
+
+    //socket.emit('videoUrlChange');
 })
 
 $('#play-pause-btn').click(() => {
@@ -323,6 +325,10 @@ $('#mute-unmute-btn').click(() => {
 });
 
 // receive a message from the server
+socket.on("videoUrlChange", (args) => {
+    loadNewVideo(args);
+});
+
 socket.on("playVideo", (args) => {
     player.playVideo()
     $('#play-pause-btn').children().removeClass('fa-play');
@@ -337,4 +343,5 @@ socket.on("pauseVideo", (args) => {
 
 
 
- */
+
+

@@ -52,6 +52,10 @@
       </nav>
     </div>
     <div class="container-main">
+      <div class="copy-container">
+        <input  id="copy-text" type="text" placeholder=""></input>
+        <button title="Copy & Share" type="submit" id="copy-btn"><i class="fa-solid fa-copy"></i></button>
+      </div>
       <div class="container-secondary" id="container">
         <div class="video-player-container">
           <div id="info-content">
@@ -68,7 +72,7 @@
             <button class="control-btn" id="mute-unmute-btn"><i class="fa-solid fa-volume-xmark"></i></button>
           </div>
           <div class="slider-container">
-            <input type="range" name="time" value="0" id="time-slider">
+            <input type="range" name="time" value="0" id="time-slider" step="0.1">
           </div>
           <div class="time-display-container">
             <p id="current-time">00:00</p>
@@ -76,7 +80,7 @@
             <p id="end-time">00:00</p>
           </div>
         </div>
-        <div id="video-player-inputs">
+        <div class="video-player-inputs-container">
           <button type="submit" title="Redirect to current video (YouTube)" id="platform-btn"><i class="fa-brands fa-youtube"></i></button>
           <input id="video-input" type="text" placeholder="Insert YouTube Link here..."></input>
           <button type="submit" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>

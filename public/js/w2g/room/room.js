@@ -1,3 +1,5 @@
+/* $('#copy-text')[0].placeholder = window.location.href;
+
 
 const roomId = window.location.pathname.substring(window.location.pathname.length - 6, window.location.pathname.length)
 const socket = io();
@@ -11,7 +13,7 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 // This function creates an <iframe> (and YouTube player)
 var player;
-
+let forwardingInterval
 
 
 function calculateTimeFormat(duration)
@@ -36,9 +38,9 @@ function calculateTimeFormat(duration)
 function initSliderAndTime() {
 
     setTimeout(() => {
-        var durationInSeconds = Math.floor(player.getDuration())
+        var durationInSeconds = player.getDuration()
     
-        $('#time-slider').attr('max', durationInSeconds)
+        $('#time-slider').attr('max', player.getDuration().toString().match(/^-?\d+(?:\.\d{0,1})?/)[0])
     
         $('#end-time')[0].innerText = calculateTimeFormat(durationInSeconds);
         
@@ -48,8 +50,9 @@ function initSliderAndTime() {
 
 function updateSliderAndTime() {
 
-    var curTimeInSeconds = Math.floor(player.getCurrentTime());
-    $('#time-slider')[0].value = curTimeInSeconds;
+    var curTimeInSeconds = player.getCurrentTime();
+
+    $('#time-slider')[0].value = curTimeInSeconds.toString().match(/^-?\d+(?:\.\d{0,1})?/)[0];
     $('#current-time')[0].innerText = calculateTimeFormat(curTimeInSeconds);
 
 }
@@ -68,7 +71,7 @@ function onYouTubeIframeAPIReady() {
             mute: 1,
             showinfo: 0,
         },
-        videoId: 'M7lc1UVf-VE',
+        videoId: 'dQw4w9WgXcQ',
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
@@ -120,6 +123,34 @@ function getVideoUrl() {
             width: "50%",
           });
         },
+    });
+}
+
+function copyToClipboard() {
+
+    let copyText = $('#copy-text')[0].placeholder;
+  
+     // Copy the text inside the text field 
+    navigator.clipboard.writeText(copyText)
+    .then(() => {
+      $('#copy-btn').css('background-color', '#fdfd96');
+      $("#copy-btn>i").removeClass('fa-copy');
+      $("#copy-btn>i").addClass('fa-check');
+      setTimeout(() => {
+        $('#copy-btn').css('background-color', 'rgb(211, 211, 211)');
+        $("#copy-btn>i").removeClass('fa-check');
+        $("#copy-btn>i").addClass('fa-copy');
+      }, 3000)
+    })
+    .catch(() => {
+        $('#copy-btn').css('background-color', '#ff6961');
+        $("#copy-btn>i").removeClass('fa-copy');
+        $("#copy-btn>i").addClass('fa-xmark');
+        setTimeout(() => {
+            $('#copy-btn').css('background-color', 'rgb(211, 211, 211)');
+            $("#copy-btn>i").removeClass('fa-xmark');
+            $("#copy-btn>i").addClass('fa-copy');
+        }, 3000)
     });
 }
 
@@ -197,11 +228,14 @@ function loadNewVideo(videoId, unMute) {
 
     initSliderAndTime();
 
-    setInterval(function () {
+    forwardingInterval = setInterval(function () {
         updateSliderAndTime()
-    }, 1000);
-
+    }, 100);    
 }
+
+$('#copy-btn').click(() => {
+    copyToClipboard();
+})
 
 $('#platform-btn').click(() => {
     let inputString = $('#video-input').val();
@@ -232,7 +266,6 @@ $('#search-btn').click(() => {
             loadNewVideo(inputString, true);
             updateVideoUrl(inputString, roomId);
 
-
         } else {
             $("#video-input").css("border", "3px solid red");
         }    
@@ -242,6 +275,22 @@ $('#search-btn').click(() => {
 $(document).keydown(function(event) {
     if(event.key === "Enter" && $("#video-input").is(":focus")) {
         $('#search-btn').trigger('click');
+    }
+})
+
+$('#time-slider').on('input',() => {
+    $('#current-time')[0].innerText = calculateTimeFormat($('#time-slider')[0].value);
+    clearInterval(forwardingInterval);
+})
+
+$('#time-slider').change(() => {
+    player.seekTo($('#time-slider')[0].value);
+    $('#current-time')[0].innerText = calculateTimeFormat($('#time-slider')[0].value);
+
+    if($('#time-slider')[0].value != $('#time-slider')[0].max) {
+        forwardingInterval = setInterval(function () {
+            updateSliderAndTime()
+        }, 100);
     }
 })
 
@@ -285,3 +334,7 @@ socket.on("pauseVideo", (args) => {
     $('#play-pause-btn').children().removeClass('fa-pause');
     $('#play-pause-btn').children().addClass('fa-play');
 });
+
+
+
+ */

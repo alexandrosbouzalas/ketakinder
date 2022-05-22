@@ -39,6 +39,8 @@ function createRoom(roomId, hostUId) {
 
 router.get("/", (req, res) => {
   if (req.session.authenticated) {
+
+    console.log(req)
     res.render("w2g/w2g", { title: title });
   } else {
     res.redirect("/");

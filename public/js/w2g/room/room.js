@@ -34,13 +34,15 @@ function calculateTimeFormat(duration)
 }
 
 function initSliderAndTime() {
-    var durationInSeconds = Math.floor(player.getDuration())
 
-    $('#time-slider').attr('max', durationInSeconds)
-
-    $('#end-time')[0].innerText = calculateTimeFormat(durationInSeconds);
-
-    showVideoControls();
+    setTimeout(() => {
+        var durationInSeconds = Math.floor(player.getDuration())
+    
+        $('#time-slider').attr('max', durationInSeconds)
+    
+        $('#end-time')[0].innerText = calculateTimeFormat(durationInSeconds);
+        
+    }, 1000)
 
 }
 
@@ -55,13 +57,16 @@ function updateSliderAndTime() {
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
     getVideoUrl();
-
 }
 
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-        playerVars: { 
-            controls: 0
+        playerVars: {
+            autoplay: 1,
+            controls: 0,
+            modestbranding: 1,
+            mute: 1,
+            showinfo: 0,
         },
         videoId: 'M7lc1UVf-VE',
         events: {
@@ -76,8 +81,16 @@ function onYouTubeIframeAPIReady() {
 // The function indicates that when playing a video (state=1),
 // the player should play for six seconds and then stop.
 function onPlayerStateChange(event) {
-  if (event.data == YT.PlayerState.PLAYING) {
+   if(event.data == YT.PlayerState.PAUSED) {
+    $('#play-pause-btn').children().removeClass('fa-pause');
+    $('#play-pause-btn').children().addClass('fa-play');
+    socket.emit('pauseVideo')
+  } else if (event.data == YT.PlayerState.PLAYING) {
+    $('#play-pause-btn').children().removeClass('fa-play');
+    $('#play-pause-btn').children().addClass('fa-pause');
+    socket.emit('playVideo')
   }
+
 }
 
 function getVideoUrl() {
@@ -168,26 +181,25 @@ function validateInputString(input) {
     }
 }
 
-function loadNewVideo(videoId) {
+function loadNewVideo(videoId, unMute) {
+
     player.loadVideoById({videoId: videoId,
-        startSeconds:0,
+        startSeconds: 0,
     });
     
+    if(unMute) {
+        player.unMute()
+        $('#mute-unmute-btn').children().removeClass('fa-volume-xmark');
+        $('#mute-unmute-btn').children().addClass('fa-volume-high')
+    }
+
+    showVideoControls();
+
+    initSliderAndTime();
+
     setInterval(function () {
         updateSliderAndTime()
     }, 1000);
-
-    setTimeout(function () {
-        player.playVideo();
-
-        var durationInSeconds = Math.floor(player.getDuration())
-    
-        $('#time-slider').attr('max', durationInSeconds)
-    
-        $('#end-time')[0].innerText = calculateTimeFormat(durationInSeconds);
-    
-        showVideoControls();
-    }, 500)
 
 }
 
@@ -217,7 +229,7 @@ $('#search-btn').click(() => {
             // Grab the youtube url
             inputString = inputString.substring(inputString.length - 11, inputString.length);
 
-            loadNewVideo(inputString);
+            loadNewVideo(inputString, true);
             updateVideoUrl(inputString, roomId);
 
 

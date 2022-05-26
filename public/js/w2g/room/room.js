@@ -17,7 +17,9 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 // This function creates an <iframe> (and YouTube player)
 var player;
-let forwardingInterval
+let forwardingInterval;
+var playerState = 1;
+
 $('#copy-text')[0].placeholder = window.location.href;
 
 
@@ -99,6 +101,8 @@ function onPlayerStateChange(event) {
     socket.emit('playVideo')
   }
 
+  playerState = event.data;
+
 }
 
 function getVideoUrl() {
@@ -114,7 +118,7 @@ function getVideoUrl() {
         data: JSON.stringify({ data: data }),
         success: function(response) {
             if(response) {
-                loadNewVideo(response);              
+                loadNewVideo(response);
             } 
         },
         error: function (err) {
@@ -237,9 +241,9 @@ function loadNewVideo(videoId, unMute, startSeconds) {
     $('#video-input')[0].value = "https://www.youtube.com/watch?v=" + videoId;
 
     if(unMute) {
-        player.unMute()
+        player.unMute();
         $('#mute-unmute-btn').children().removeClass('fa-volume-xmark');
-        $('#mute-unmute-btn').children().addClass('fa-volume-high')
+        $('#mute-unmute-btn').children().addClass('fa-volume-high');
     }
 
     showVideoControls();
@@ -247,8 +251,8 @@ function loadNewVideo(videoId, unMute, startSeconds) {
     initSliderAndTime();
 
     forwardingInterval = setInterval(function () {
-        updateSliderAndTime()
-    }, 100);    
+        updateSliderAndTime();
+    }, 100);
 }
 
 $('#copy-btn').click(() => {
@@ -312,6 +316,7 @@ $('#time-slider').change(() => {
             updateSliderAndTime()
         }, 100);
     }
+    socket.emit('videoTimeChange', $('#time-slider')[0].value)
 })
 
 $('#play-pause-btn').click(() => {
@@ -342,9 +347,12 @@ $('#mute-unmute-btn').click(() => {
     }
 });
 
-// receive a message from the server
 socket.on("videoUrlChange", (args) => {
-    loadNewVideo(args);
+    loadNewVideo(args, true, 1);
+});
+
+socket.on("videoTimeChange", (args) => {
+    player.seekTo(args);
 });
 
 socket.on("playVideo", (args) => {

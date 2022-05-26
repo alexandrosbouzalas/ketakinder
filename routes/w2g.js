@@ -138,9 +138,7 @@ router.post("/room/:roomId", async (req, res) => {
           throw new Error("Can't update url field: " + e.message);
         }
       }
-    }
-
-
+    } 
   } else {
     res.redirect("/");
   }

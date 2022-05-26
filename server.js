@@ -107,6 +107,7 @@ try {
   io.on('connection', function(socket) {
     var query = socket.handshake.query;
     var roomName = query.roomName;
+    var timePostion;
     if(!roomName || roomName.length != 6) {
         console.log('No room name specified');
         socket.emit('error', "RoomID is Invalid.");

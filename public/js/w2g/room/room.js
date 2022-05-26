@@ -42,25 +42,30 @@ function calculateTimeFormat(duration)
     return ret;
 }
 
+
+function updateSliderAndTime() {
+    
+    var curTimeInSeconds = player.getCurrentTime();
+    
+    $('#time-slider')[0].value = curTimeInSeconds.toString().match(/^-?\d+(?:\.\d{0,1})?/)[0];
+    $('#current-time')[0].innerText = calculateTimeFormat(curTimeInSeconds);
+    
+}
+
 function initSliderAndTime() {
 
     setTimeout(() => {
         var durationInSeconds = player.getDuration()
     
-        $('#time-slider').attr('max', player.getDuration().toString().match(/^-?\d+(?:\.\d{0,1})?/)[0])
+        $('#time-slider').attr('max', player.getDuration().toString().match(/^-?\d+(?:\.\d{0,1})?/)[0]);
     
         $('#end-time')[0].innerText = calculateTimeFormat(durationInSeconds);
         
-    }, 2000);
-
-}
-
-function updateSliderAndTime() {
-
-    var curTimeInSeconds = player.getCurrentTime();
-
-    $('#time-slider')[0].value = curTimeInSeconds.toString().match(/^-?\d+(?:\.\d{0,1})?/)[0];
-    $('#current-time')[0].innerText = calculateTimeFormat(curTimeInSeconds);
+        forwardingInterval = setInterval(function () {
+            updateSliderAndTime();
+        }, 100);
+        
+    }, 000);
 
 }
 
@@ -94,11 +99,15 @@ function onPlayerStateChange(event) {
    if(event.data == YT.PlayerState.PAUSED) {
     $('#play-pause-btn').children().removeClass('fa-pause');
     $('#play-pause-btn').children().addClass('fa-play');
-    socket.emit('pauseVideo')
+    socket.emit('pauseVideo');
   } else if (event.data == YT.PlayerState.PLAYING) {
     $('#play-pause-btn').children().removeClass('fa-play');
     $('#play-pause-btn').children().addClass('fa-pause');
-    socket.emit('playVideo')
+    socket.emit('playVideo');
+  } else {
+    $('#play-pause-btn').children().removeClass('fa-play');
+    $('#play-pause-btn').children().addClass('fa-pause');
+    socket.emit('playVideo');
   }
 
   playerState = event.data;
@@ -250,9 +259,6 @@ function loadNewVideo(videoId, unMute, startSeconds) {
 
     initSliderAndTime();
 
-    forwardingInterval = setInterval(function () {
-        updateSliderAndTime();
-    }, 100);
 }
 
 $('#copy-btn').click(() => {
@@ -316,6 +322,7 @@ $('#time-slider').change(() => {
             updateSliderAndTime()
         }, 100);
     }
+
     socket.emit('videoTimeChange', $('#time-slider')[0].value)
 })
 

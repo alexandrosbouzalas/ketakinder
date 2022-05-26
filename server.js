@@ -126,6 +126,10 @@ try {
       socket.to(roomName).emit('videoUrlChange', args);
     })
 
+    socket.on('videoTimeChange', function (args) {
+      socket.to(roomName).emit('videoTimeChange', args);
+    })
+
     socket.on('disconnect', function () {
       console.log('Client disconnected');
     

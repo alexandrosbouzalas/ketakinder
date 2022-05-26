@@ -1,5 +1,5 @@
 window.onload = function () {
   setTimeout(() => {
-    window.location.href = "https://ketakinder.tk";
+    window.location.pathname = "/";
   }, 4000);
 };

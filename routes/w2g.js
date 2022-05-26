@@ -19,6 +19,7 @@ router.use(useragent.express());
 router.use("./public/js/utils", validateInputUrl);
 router.use("./public/js/utils", generateRoomToken);
 
+
 function validateInputString(input) {
   const reInputString = /^(https:\/\/([w]{3}\.)?youtu(be)?\.(com|de|be)\/(watch\?v=)?)?[a-zA-Z0-9_-]{11}$/;
 
@@ -75,6 +76,7 @@ router.post("/", async (req, res) => {
 
         try {
           await room.save();
+
           console.log("Room created successfully")
           res.send(roomId).status(200);
         } catch {

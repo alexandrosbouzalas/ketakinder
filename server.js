@@ -104,36 +104,45 @@ try {
 
   app.set('socketio', io);
 
-  io.sockets.on('connection', function (socket) {
-    console.log("Client connected")
+  io.on('connection', function(socket) {
+    var query = socket.handshake.query;
+    var roomName = query.roomName;
+    if(!roomName || roomName.length != 6) {
+        console.log('No room name specified');
+        socket.emit('error', "RoomID is Invalid.");
+    }
+    socket.join(roomName);
 
     socket.on('playVideo', function (args){
-      socket.broadcast.emit('playVideo');
+      socket.to(roomName).emit('playVideo');
     });
     
     socket.on('pauseVideo', function (args){
-      socket.broadcast.emit('pauseVideo');
+      socket.to(roomName).emit('pauseVideo');
     });
 
     socket.on('videoUrlChange', function (args) {
-      socket.broadcast.emit('videoUrlChange', args);
+      socket.to(roomName).emit('videoUrlChange', args);
     })
 
-    // Whenever someone disconnects this piece of code executed
     socket.on('disconnect', function () {
       console.log('Client disconnected');
+    
+      // Get the object containing the users in a room
+      let clients = io.sockets.adapter.rooms.get(roomName);
 
       // If the last user disconnects from the room, delete it.
-      if(socket.server.eio.clientsCount === 0) {
-
+      if(!clients) {
         setTimeout(() => {
           
-          // Checking again after 1 minute before deleting, so the room is not deleted when the page is refreshed
-          if(socket.server.eio.clientsCount === 0) {
+          clients = io.sockets.adapter.rooms.get(roomName);
+
+          // Checking again after 30 seconds before deleting, so the room is not deleted when the page is refreshed
+          if(!clients) {
             deleteRoom(socket);
             console.log('Room deleted')
           }
-        }, 5000)
+        }, 30000)
       }
     });
   });

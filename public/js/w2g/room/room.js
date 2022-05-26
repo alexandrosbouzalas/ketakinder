@@ -1,6 +1,12 @@
 
 const roomId = window.location.pathname.substring(window.location.pathname.length - 6, window.location.pathname.length)
-const socket = io();
+
+const roomName = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+const socket = io({
+    query: {
+        roomName: roomName,
+    },
+});
 
 // This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
@@ -43,7 +49,7 @@ function initSliderAndTime() {
     
         $('#end-time')[0].innerText = calculateTimeFormat(durationInSeconds);
         
-    }, 1000);
+    }, 2000);
 
 }
 
@@ -132,14 +138,25 @@ function copyToClipboard() {
      // Copy the text inside the text field 
     navigator.clipboard.writeText(copyText)
     .then(() => {
-      $('#copy-btn').css('background-color', '#fdfd96');
-      $("#copy-btn>i").removeClass('fa-copy');
-      $("#copy-btn>i").addClass('fa-check');
-      setTimeout(() => {
-        $('#copy-btn').css('background-color', 'rgb(211, 211, 211)');
-        $("#copy-btn>i").removeClass('fa-check');
-        $("#copy-btn>i").addClass('fa-copy');
-      }, 3000)
+        try{
+            $('#copy-btn').css('background-color', '#fdfd96');
+            $("#copy-btn>i").removeClass('fa-copy');
+            $("#copy-btn>i").addClass('fa-check');
+            setTimeout(() => {
+              $('#copy-btn').css('background-color', 'rgb(211, 211, 211)');
+              $("#copy-btn>i").removeClass('fa-check');
+              $("#copy-btn>i").addClass('fa-copy');
+            }, 3000)
+        } catch {
+            $('#copy-btn').css('background-color', '#ff6961');
+            $("#copy-btn>i").removeClass('fa-copy');
+            $("#copy-btn>i").addClass('fa-xmark');
+            setTimeout(() => {
+                $('#copy-btn').css('background-color', 'rgb(211, 211, 211)');
+                $("#copy-btn>i").removeClass('fa-xmark');
+                $("#copy-btn>i").addClass('fa-copy');
+            }, 3000)
+        }
     })
     .catch(() => {
         $('#copy-btn').css('background-color', '#ff6961');
@@ -161,7 +178,7 @@ function showVideoControls() {
         $("#info-content").css("display", "none");
         $("#button-container").css("display", "flex");
         $(".container-main").css("display", "block");
-        $("#video-input").css("border", "none");
+        $("#video-input").css("color", "black");
     }, 500);
         
 }
@@ -204,19 +221,21 @@ function updateVideoUrl(inputString) {
 function validateInputString(input) {
     const reInputString = /^(https:\/\/([w]{3}\.)?youtu(be)?\.(com|de|be)\/(watch\?v=)?)?[a-zA-Z0-9_-]{11}$/;
 
-    if (reInputString.test(input) ) {
+    if (reInputString.test(input.trim()) ) {
         return true;
     } else {
         return false;
     }
 }
 
-function loadNewVideo(videoId, unMute) {
+function loadNewVideo(videoId, unMute, startSeconds) {
 
     player.loadVideoById({videoId: videoId,
-        startSeconds: 0,
+        startSeconds: startSeconds | 0,
     });
     
+    $('#video-input')[0].value = "https://www.youtube.com/watch?v=" + videoId;
+
     if(unMute) {
         player.unMute()
         $('#mute-unmute-btn').children().removeClass('fa-volume-xmark');
@@ -244,7 +263,7 @@ $('#platform-btn').click(() => {
         if(validateInputString(inputString)) {
             window.open(linkTemplate + "/watch?v=" + inputString.substring(inputString.length - 11, inputString.length), '_blank');      
         } else {
-            $("#video-input").css("border", "3px solid red");
+            $("#video-input").css("color", "red");
         }
     } else {
         window.open(linkTemplate, '_blank');
@@ -263,11 +282,12 @@ $('#search-btn').click(() => {
             inputString = inputString.substring(inputString.length - 11, inputString.length);
 
             loadNewVideo(inputString, true);
+
             updateVideoUrl(inputString, roomId);
             socket.emit('videoUrlChange', inputString);
 
         } else {
-            $("#video-input").css("border", "3px solid red");
+            $("#video-input").css("color", "red");
         }    
     }
 })
@@ -292,8 +312,6 @@ $('#time-slider').change(() => {
             updateSliderAndTime()
         }, 100);
     }
-
-    //socket.emit('videoUrlChange');
 })
 
 $('#play-pause-btn').click(() => {
@@ -341,7 +359,16 @@ socket.on("pauseVideo", (args) => {
     $('#play-pause-btn').children().addClass('fa-play');
 });
 
-
-
-
-
+socket.on("error", (args) => {
+    Swal.fire({
+        title: args.toString(),
+        icon: "error",
+        allowOutsideClick: false,
+        confirmButtonText: "OK",
+        confirmButtonColor: "#007bff",
+        background: "#f1f4f6",
+        width: "50%",
+    }).then(() => {
+        window.location.pathname = 'w2g';
+    });
+});

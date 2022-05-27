@@ -130,6 +130,21 @@ try {
       socket.to(roomName).emit('videoTimeChange', args);
     })
 
+    socket.on('checkClients', function (args) {
+      const clients = io.sockets.adapter.rooms.get(roomName);
+      
+      const [first] = clients; 
+
+      if(clients.size > 1) {
+        socket.broadcast.to(first).emit('getVideoTime', args);
+      } else if(clients.size == 1) {
+        io.sockets.in(roomName).emit('videoUrlChange', {url: args});
+      }
+    })
+    socket.on('videoTime', function (args) {
+      socket.to(roomName).emit('videoUrlAndTimeChange', args);
+    })
+
     socket.on('disconnect', function () {
       console.log('Client disconnected');
     

@@ -18,7 +18,7 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 // This function creates an <iframe> (and YouTube player)
 var player;
 let forwardingInterval;
-var playerState = 1;
+let videoUrl;
 
 $('#copy-text')[0].placeholder = window.location.href;
 
@@ -65,7 +65,7 @@ function initSliderAndTime() {
             updateSliderAndTime();
         }, 100);
         
-    }, 000);
+    }, 2000);
 
 }
 
@@ -127,7 +127,7 @@ function getVideoUrl() {
         data: JSON.stringify({ data: data }),
         success: function(response) {
             if(response) {
-                loadNewVideo(response);
+                socket.emit('checkClients', response);
             } 
         },
         error: function (err) {
@@ -319,7 +319,7 @@ $('#time-slider').change(() => {
 
     if($('#time-slider')[0].value != $('#time-slider')[0].max) {
         forwardingInterval = setInterval(function () {
-            updateSliderAndTime()
+            updateSliderAndTime();
         }, 100);
     }
 
@@ -328,34 +328,42 @@ $('#time-slider').change(() => {
 
 $('#play-pause-btn').click(() => {
     if ($('#play-pause-btn').children().hasClass('fa-play')) {
-        player.playVideo()
+        player.playVideo();
         $('#play-pause-btn').children().removeClass('fa-play');
         $('#play-pause-btn').children().addClass('fa-pause');
-        socket.emit('playVideo')
+        socket.emit('playVideo');
         
     } else if ($('#play-pause-btn').children().hasClass('fa-pause')){
-        player.pauseVideo()
+        player.pauseVideo();
         $('#play-pause-btn').children().removeClass('fa-pause');
         $('#play-pause-btn').children().addClass('fa-play');
-        socket.emit('pauseVideo')
+        socket.emit('pauseVideo');
     }
 });
 
 $('#mute-unmute-btn').click(() => {
     if ($('#mute-unmute-btn').children().hasClass('fa-volume-xmark')) {
-        player.unMute()
+        player.unMute();
         $('#mute-unmute-btn').children().removeClass('fa-volume-xmark');
         $('#mute-unmute-btn').children().addClass('fa-volume-high');
         
     } else if ($('#mute-unmute-btn').children().hasClass('fa-volume-high')){
-        player.mute()
+        player.mute();
         $('#mute-unmute-btn').children().removeClass('fa-volume-high');
         $('#mute-unmute-btn').children().addClass('fa-volume-xmark');
     }
 });
 
 socket.on("videoUrlChange", (args) => {
-    loadNewVideo(args, true, 1);
+    if(args.url) {
+        loadNewVideo(args.url, false, 0);
+    } else {
+        loadNewVideo(args, true, 0);
+    }
+});
+
+socket.on("videoUrlAndTimeChange", (args) => {
+    loadNewVideo(args.url, false, args.time + 1);
 });
 
 socket.on("videoTimeChange", (args) => {
@@ -363,15 +371,19 @@ socket.on("videoTimeChange", (args) => {
 });
 
 socket.on("playVideo", (args) => {
-    player.playVideo()
+    player.playVideo();
     $('#play-pause-btn').children().removeClass('fa-play');
     $('#play-pause-btn').children().addClass('fa-pause');
 });
 
 socket.on("pauseVideo", (args) => {
-    player.pauseVideo()
+    player.pauseVideo();
     $('#play-pause-btn').children().removeClass('fa-pause');
     $('#play-pause-btn').children().addClass('fa-play');
+});
+
+socket.on("getVideoTime", (args) => {
+    socket.emit('videoTime', {time: player.getCurrentTime(), url: args});
 });
 
 socket.on("error", (args) => {

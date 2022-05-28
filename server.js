@@ -87,7 +87,7 @@ async function deleteRoom(socket) {
 
     if (room) {
       await room.deleteOne({ roomId: roomId });
-
+      redisClient.del(roomId);
     } else {
       console.log("Room does not exist or has been deleted");
     }
@@ -107,12 +107,21 @@ try {
   io.on('connection', function(socket) {
     var query = socket.handshake.query;
     var roomName = query.roomName;
-    var timePostion;
+
     if(!roomName || roomName.length != 6) {
-        console.log('No room name specified');
         socket.emit('error', "RoomID is Invalid.");
     }
+
     socket.join(roomName);
+
+    const sessionId = socket.handshake.headers.cookie.substring(16).split('.')[0];
+
+    redisClient.get("sess:" + sessionId, (err, response) => {
+      if (err) throw new Error(err);
+      else {
+        socket.to(roomName).emit('userJoin', JSON.parse(response).user.username);
+      }
+    });
 
     socket.on('playVideo', function (args){
       socket.to(roomName).emit('playVideo');
@@ -146,8 +155,14 @@ try {
     })
 
     socket.on('disconnect', function () {
-      console.log('Client disconnected');
-    
+
+      redisClient.get("sess:" + sessionId, (err, response) => {
+        if (err) throw new Error(err);
+        else {
+          socket.to(roomName).emit('userExit', JSON.parse(response).user.username);
+        }
+      });
+  
       // Get the object containing the users in a room
       let clients = io.sockets.adapter.rooms.get(roomName);
 

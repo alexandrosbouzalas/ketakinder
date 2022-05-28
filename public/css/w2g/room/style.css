@@ -89,8 +89,12 @@
 }
 
 
-button:hover {
+#search-btn:hover, #copy-btn:hover, #platform-btn:hover {
   opacity: 0.8;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 input::placeholder {
@@ -99,6 +103,11 @@ input::placeholder {
 
 button:focus {
   outline: none;
+}
+
+*::placeholder { 
+  color: black;
+  opacity: 1;
 }
 
 #video-input {
@@ -193,4 +202,69 @@ button:focus {
   text-align: center;
   font-size: 15px;
   color: white
+}
+
+#overlay {
+  position: fixed; 
+  display: inline-block;
+  width: 300px; 
+  height: auto; 
+  z-index: 2; 
+  margin: 0px 20px 20px 20px;
+}
+
+.x-btn-join, .x-btn-exit {
+  width: 40px;
+  height: 40px;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  display: block;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  outline: none;
+}
+
+.x-btn-join {
+  background-color: #fdfd96;
+}
+
+.x-btn-exit {
+  background-color: #546080;
+}
+
+.info-box {
+  position: relative;
+  width: 300px; 
+  height: 40px; 
+  z-index: 2; 
+  margin: 10px 0px 10px 0px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+
+#join-text, #exit-text {
+  display: inline-block;
+  color: black;
+  height: 40px;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  width: 300px;
+  padding-left: 15px;
+  pointer-events: none;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+#join-text {
+  background-color: #fdfd96;
+}
+
+#exit-text {
+  background-color: #546080;
 }

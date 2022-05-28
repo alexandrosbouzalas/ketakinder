@@ -118,7 +118,7 @@ router.get("/room/:roomId", async (req, res) => {
   }
 });
 
-router.post("/room/:roomId", async (req, res) => {
+router.post("/room/:roomId", (req, res) => {
   if (req.session.authenticated) {
 
     if(req.body.data.action === "fetch") {

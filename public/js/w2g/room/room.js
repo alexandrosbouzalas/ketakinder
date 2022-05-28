@@ -16,7 +16,8 @@ var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 // This function creates an <iframe> (and YouTube player)
-var player;
+let player;
+let playerState;
 let forwardingInterval;
 let videoUrl;
 
@@ -53,7 +54,6 @@ function updateSliderAndTime() {
 }
 
 function initSliderAndTime() {
-
     setTimeout(() => {
         var durationInSeconds = player.getDuration()
     
@@ -243,6 +243,8 @@ function validateInputString(input) {
 
 function loadNewVideo(videoId, unMute, startSeconds) {
 
+    clearInterval(forwardingInterval);
+
     player.loadVideoById({videoId: videoId,
         startSeconds: startSeconds | 0,
     });
@@ -354,9 +356,43 @@ $('#mute-unmute-btn').click(() => {
     }
 });
 
+socket.on('userJoin', (args) => {
+    $('#overlay').prepend(`<div class="info-box"><input id="join-text" type="text" placeholder="${args} joined the room"><button title="Copy &amp; Share" type="submit" class="x-btn-join"><i class="fa-solid fa-xmark"></i></button></div>`);
+    $(".info-box").first().hide();
+    $(".info-box").first().slideDown();
+
+    $('.x-btn-join').click((event) => {
+        $(event.target).parents('.info-box').slideUp();
+    })
+
+    setTimeout(() => {
+        $(".info-box").first().slideUp();
+        $(".info-box").first().promise().done(function(){
+            $(".info-box").first().remove();
+        });
+    }, 3000)
+})
+
+socket.on('userExit', (args) => {
+    $('#overlay').prepend(`<div class="info-box"><input id="exit-text" type="text" placeholder="${args} left the room"><button title="Copy &amp; Share" type="submit" class="x-btn-exit"><i class="fa-solid fa-xmark"></i></button></div>`);
+    $(".info-box").first().hide();
+    $(".info-box").first().slideDown();
+
+    $('.x-btn-exit').click((event) => {
+        $(event.target).parents('.info-box').slideUp();
+    })
+
+    setTimeout(() => {
+        $(".info-box").first().slideUp();
+        $(".info-box").first().promise().done(function(){
+            $(".info-box").first().remove();
+        });
+    }, 3000)
+})
+
 socket.on("videoUrlChange", (args) => {
     if(args.url) {
-        loadNewVideo(args.url, false, 0);
+        loadNewVideo(args.url, false, 0);   
     } else {
         loadNewVideo(args, true, 0);
     }

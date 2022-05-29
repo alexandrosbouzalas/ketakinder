@@ -23,6 +23,7 @@ let videoUrl;
 
 $('#copy-text')[0].placeholder = window.location.href;
 
+socket.emit('getUsersInRoom');
 
 function calculateTimeFormat(duration)
 {   
@@ -395,14 +396,14 @@ socket.on('userJoin', (args) => {
 
     $('.x-btn-join').click((event) => {
         $(event.target).parents('.info-box').slideUp();
-    })
+    });
 
     setTimeout(() => {
         $(".info-box").first().slideUp();
         $(".info-box").first().promise().done(function(){
             $(".info-box").first().remove();
         });
-    }, 3000)
+    }, 3000);
 
     $('.user-cards-container').append(`<div class="user-card">
     <div>
@@ -411,7 +412,21 @@ socket.on('userJoin', (args) => {
     <div class="user-card-info">
       <p class="card-name" title="${args}">${args}</p>
     </div>
-    </div>`)
+    </div>`);
+})
+
+socket.on('usersInRoom', (args) => {
+    
+    args.forEach(user => {
+        $('.user-cards-container').append(`<div class="user-card">
+        <div>
+          <img class="card-image" src="/img/default-user.jpeg" alt="Avatar">
+        </div>
+        <div class="user-card-info">
+          <p class="card-name" title="${user.username}">${user.username}</p>
+        </div>
+        </div>`)
+    })
 })
 
 socket.on('userExit', (args) => {

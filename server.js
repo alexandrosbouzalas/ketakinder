@@ -104,12 +104,16 @@ try {
 
   app.set('socketio', io);
 
+  let connectedUsers = []; 
+  
   io.on('connection', function(socket) {
-    var query = socket.handshake.query;
-    var roomName = query.roomName;
+    let query = socket.handshake.query;
+    let roomName = query.roomName;
+    let connectedUsersRoom = [];
+    let userObjTemp = {};
 
     if(!roomName || roomName.length != 6) {
-        socket.emit('error', "RoomID is Invalid.");
+        socket.emit('error', "Roomid is Invalid.");
     }
 
     socket.join(roomName);
@@ -119,8 +123,29 @@ try {
     redisClient.get("sess:" + sessionId, (err, response) => {
       if (err) throw new Error(err);
       else {
-        socket.to(roomName).emit('userJoin', JSON.parse(response).user.username);
+
+        let username = JSON.parse(response).user.username;
+
+        userObjTemp["id"] = socket.id;
+        userObjTemp["username"] = username;
+        userObjTemp["roomId"] = roomName;
+
+        connectedUsers.push(userObjTemp);
+
+        socket.to(roomName).emit('userJoin', username);
       }
+    });
+
+    socket.on('getUsersInRoom', (args) => {
+
+      connectedUsers.forEach((user) => {
+        if(user.roomId === roomName && user.id != socket.id) {
+          connectedUsersRoom.push(user);
+        }
+      })
+
+      io.to(socket.id).emit('usersInRoom', connectedUsersRoom);
+
     });
 
     socket.on('playVideo', function (args){
@@ -156,13 +181,14 @@ try {
 
     socket.on('disconnect', function () {
 
-      redisClient.get("sess:" + sessionId, (err, response) => {
-        if (err) throw new Error(err);
-        else {
-          socket.to(roomName).emit('userExit', JSON.parse(response).user.username);
-        }
-      });
-  
+      connectedUsers.forEach(function (user) {
+        if(user['id'] == socket.id) {
+          socket.to(roomName).emit('userExit', user.username);
+          connectedUsers.pop(user);
+        } ;
+      })
+
+
       // Get the object containing the users in a room
       let clients = io.sockets.adapter.rooms.get(roomName);
 

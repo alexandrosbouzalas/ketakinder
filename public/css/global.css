@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+*::placeholder { 
+  color: black;
+  opacity: 1;
+}
+
 body {
   background-color: #282c34;
 }

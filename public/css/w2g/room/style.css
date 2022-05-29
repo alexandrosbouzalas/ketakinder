@@ -105,11 +105,6 @@ button:focus {
   outline: none;
 }
 
-*::placeholder { 
-  color: black;
-  opacity: 1;
-}
-
 #video-input {
   background-color: rgb(211, 211, 211);
   height: 40px;
@@ -125,7 +120,6 @@ button:focus {
 
 }
 
-
 .fas {
   font-size: 25px;
   vertical-align: middle;
@@ -137,7 +131,7 @@ button:focus {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin: 30px 0px 30px 0px;
+  margin: 30px 0px 50px 0px;
 }
 
 #copy-text {
@@ -267,4 +261,69 @@ button:focus {
 
 #exit-text {
   background-color: #546080;
+}
+
+.show-cards-button-container {
+  width: 80%;
+  margin: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.arrow-line-container {
+  height: 30px;
+  margin: auto;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+#line-left {
+  transform: translate(-3px)rotate(45deg); 
+  width: 30px;
+  border-top: 5px solid #fdfd96;
+}
+
+#line-right {
+  width: 30px;
+  transform: translate(3px) rotate(-45deg); 
+  border-top: 5px solid #fdfd96;
+}
+
+.user-cards-container {
+  width: 80%;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  margin-inline: auto;
+  height: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  transition: all .5s;
+  width: 80%;
+}
+
+.user-card {
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 20px 20px 0px 20px;
+  /* overflow-wrap: break-word; */
+  width: 100px;
+  background-color: rgb(211, 211, 211);
+  height: inherit;
+  text-align: center;
+}
+
+.card-name {
+  color: black;
+  margin-bottom: 0;
+  margin: 5px;
+}
+
+.card-image {
+  height: auto;
+  width: 100%;
 }

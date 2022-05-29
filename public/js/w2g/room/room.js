@@ -356,6 +356,38 @@ $('#mute-unmute-btn').click(() => {
     }
 });
 
+$('.arrow-line-container').click(() => {
+    if($('.user-cards-container').hasClass('open')) {
+        $('.arrow-line-container').animate(
+            { deg: 0 },
+            {
+                duration: 300,
+                step: function(now) {
+                    $(this).css({ transform: 'rotate(' + now + 'deg)' });
+                }
+            }
+        );
+        
+        $('.user-cards-container').css('height', '0');
+
+        $('.user-cards-container').removeClass('open');
+        $('.user-cards-container').addClass('collapsed');
+
+    } else if($('.user-cards-container').hasClass('collapsed'))  {
+        $('.arrow-line-container').animate(
+            { deg: 180 },
+            {
+                duration: 300,
+                step: function(now) {
+                    $(this).css({ transform: 'rotate(' + now + 'deg)' });
+                }
+            }
+        );
+        $('.user-cards-container').addClass('open');
+        $('.user-cards-container').css('height', 'auto');
+    }
+})
+
 socket.on('userJoin', (args) => {
     $('#overlay').prepend(`<div class="info-box"><input id="join-text" type="text" placeholder="${args} joined the room"><button title="Copy &amp; Share" type="submit" class="x-btn-join"><i class="fa-solid fa-xmark"></i></button></div>`);
     $(".info-box").first().hide();
@@ -371,6 +403,15 @@ socket.on('userJoin', (args) => {
             $(".info-box").first().remove();
         });
     }, 3000)
+
+    $('.user-cards-container').append(`<div class="user-card">
+    <div>
+      <img class="card-image" src="/img/default-user.jpeg" alt="Avatar">
+    </div>
+    <div class="user-card-info">
+      <p class="card-name" title="${args}">${args}</p>
+    </div>
+    </div>`)
 })
 
 socket.on('userExit', (args) => {
@@ -387,7 +428,20 @@ socket.on('userExit', (args) => {
         $(".info-box").first().promise().done(function(){
             $(".info-box").first().remove();
         });
-    }, 3000)
+    }, 3000);
+
+    let currentUserCard;
+    // Prevents all cards that belong to a user being delete when for example a user is logged in with two devices
+    let deleteFlag = true; 
+    $('.user-cards-container').children().each((element) => {
+
+        currentUserCard = $('.user-cards-container').children().eq(element);
+
+        if(currentUserCard.last().children().last().children().first().text() === args && deleteFlag) {
+            currentUserCard.remove();
+            deleteFlag = false;
+        }
+    });
 })
 
 socket.on("videoUrlChange", (args) => {

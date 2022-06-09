@@ -29,3 +29,7 @@ function burgerNavigation() {
   burger.getElementsByTagName("div")[1].classList.toggle("line2-animate");
   burger.getElementsByTagName("div")[2].classList.toggle("line3-animate");
 }
+
+$("#logo").click(() => {
+  window.location.pathname = "/";
+})

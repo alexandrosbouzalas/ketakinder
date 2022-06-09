@@ -1,15 +1,112 @@
-.info {
-  text-align: center;
-  color: #fdfd96;
+.container-main {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.button-input-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.room-creation-container {
+  width: 85%;
+  height: auto;
+  margin: auto;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   font-family: "Montserrat", sans-serif;
-  font-size: 50px;
-  height: 500px;
-  line-height: 500px;
+}
+
+.arrow-icon {
+  text-align: center;
+  font-size: 35px;
+  color: #fdfd96;
+}
+
+.button-container {
+  margin: 30px 0px 30px 0px ;
+  width: 100%;
+}
+
+#w2g-text {
+  color: #fdfd96;
+  font-size: 40px;
+  padding-top: 20px;
   text-align: center;
 }
 
-p {
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
+
+#room-creation-btn {
+  background-color: #d3d3d3;
+  color: black;
+  font-size: 20px;
+  width: 220px;
+  height: 50px;
+  border: 0px;
+  padding: 0px;
+  display: block;
+  border-radius: 10px;
+  outline: none;
+  margin: 10px;
+  font-family: 'Poppins';
+}
+
+#search-btn {
+  width: 50px;
+  height: 50px;
+  border: 0px;
+  margin: 10px 10px 10px 0px ;
+  padding: 0px;
+  display: block;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#search-btn:hover {
+  opacity: 0.8;
+}
+
+#room-search-input {
+  background-color: #d3d3d3;
+  color: black;
+  font-size: 20px;
+  width: 170px;
+  height: 50px;
+  border: 0px;
+  padding: 0px;
+  display: block;
+  border-radius: 10px;
+  outline: none;
+  margin: 10px;
+  font-family: 'Poppins';
+  padding-left: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-right: 0px
+}
+
+#room-search-input::placeholder {
+  color: black;
+}
+
+#room-creation-btn:hover {
+  background-color: #fdfd96;
+  color: black;
+  transition: all 0.3s ;
+}
+
+button:focus {
+  outline: none;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }

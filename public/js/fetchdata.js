@@ -6,7 +6,7 @@ const redisPort = process.env.port || 6379;
 const redisClient = redis.createClient(redisPort);
 
 TeamSpeak.connect({
-  host: "localhost",
+  host: "ketakinder.tk",
   queryport: 10011,
   serverport: 9987,
   username: "serveradmin",
@@ -22,7 +22,7 @@ TeamSpeak.connect({
 
     data = JSON.stringify(data);
 
-    redisClient.setex("tsdata", 120, data);
+    redisClient.set("tsdata", data);
 
     process.exit(0);
   })

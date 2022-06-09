@@ -1,5 +1,70 @@
-.info {
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #282c34;
+}
+
+.navigation {
+  font-size: 24px;
+  max-width: 100%;
+  font-family: "Montserrat", sans-serif;
+  min-height: 15vh;
+}
+
+.navigation nav {
+  padding-top: 10px;
+  width: 100%;
+  z-index: 10;
+  transition: all 0.5s;
+  display: flex;
+  min-height: 8vh;
+  align-items: center;
+}
+
+.navigation nav #logo {
+  padding: 0px 20px;
+  flex-basis: 50%;
+  font-family: "Poppins";
+  display: flex;
+  color: #fdfd96;
+  padding-left: 20px;
+}
+
+.navigation nav img {
+  padding-left: 10px;
+}
+
+.navigation nav .nav-links {
+  display: flex;
+  justify-content: space-around;
+  flex-basis: 50%;
+}
+
+.navigation nav .nav-links a {
+  color: #fdfd96;
+  text-decoration: none;
+}
+
+.navigation nav .nav-links :hover {
+  opacity: 0.6;
+}
+
+.navigation #clock {
+  opacity: 1;
+  color: #fdfd96;
+}
+
+.container-main {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
   color: #fdfd96;
   font-family: "Montserrat", sans-serif;
+
 }

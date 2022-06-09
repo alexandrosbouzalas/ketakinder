@@ -47,7 +47,7 @@ function checkPattern(id) {
   const reEmail =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-  if (id === "email") return reEmail.test(element);
+  if (id === "email") return reEmail.test(element.toString().trim());
   return false;
 }
 
@@ -56,7 +56,8 @@ const verifySuccess = () => {
 
   const formData = new FormData(document.querySelector("form"));
   for (var pair of formData.entries()) {
-    if (pair[0] === "email") Object.assign(data, { email: pair[1] });
+    if (pair[0] === "email")
+      Object.assign(data, { email: pair[1].toString().trim() });
   }
 
   $.ajax({

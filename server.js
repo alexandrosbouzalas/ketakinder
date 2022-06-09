@@ -13,6 +13,9 @@ const logoutRouter = require("./routes/logout");
 const verifyRouter = require("./routes/verify");
 const recoverRouter = require("./routes/recover");
 const supportRouter = require("./routes/support");
+const roomRouter = require("./routes/room");
+
+const Room = require("./models/room");
 
 const port = 3000;
 
@@ -62,14 +65,6 @@ app.get("/", (req, res) => {
   else res.render("index/index", { title: title });
 });
 
-try {
-  app.listen(3000);
-  console.info(`Listening on: https://ketakinder.tk`);
-} catch (e) {
-  console.log("There was an error starting the app");
-  console.log(e.message);
-}
-
 app.use("/w2g", w2gRouter);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
@@ -78,3 +73,153 @@ app.use("/logout", logoutRouter);
 app.use("/verify", verifyRouter);
 app.use("/recover", recoverRouter);
 app.use("/support", supportRouter);
+app.use("/room", roomRouter);
+
+
+async function deleteRoom(socket) {
+
+  const refererUrl = socket.handshake.headers.referer;
+
+  const roomId = refererUrl.substring(refererUrl.length - 6, refererUrl.length) ;
+
+  try {
+    const room = await Room.findOne({ roomId: roomId });
+
+    if (room) {
+      await room.deleteOne({ roomId: roomId });
+      redisClient.del(roomId);
+    } else {
+      console.log("Room does not exist or has been deleted");
+    }
+  } catch (e) {
+    console.log(e.message);
+  }
+}
+
+try {
+
+  const server = app.listen(3000)
+
+  const io = require('socket.io')(server);
+
+  app.set('socketio', io);
+
+  let connectedUsers = []; 
+  
+  io.on('connection', function(socket) {
+    let query = socket.handshake.query;
+    let roomName = query.roomName;
+    let connectedUsersRoom = [];
+    let userObjTemp = {};
+
+    if(!roomName || roomName.length != 6) {
+        socket.emit('error', "Roomid is Invalid.");
+    }
+
+    socket.join(roomName);
+
+    const sessionId = socket.handshake.headers.cookie.substring(16).split('.')[0];
+
+    redisClient.get("sess:" + sessionId, (err, response) => {
+      if (err) throw new Error(err);
+      else {
+
+        let username = JSON.parse(response).user.username;
+
+        userObjTemp["id"] = socket.id;
+        userObjTemp["username"] = username;
+        userObjTemp["roomId"] = roomName;
+
+        connectedUsers.push(userObjTemp);
+
+        socket.to(roomName).emit('userJoin', username);
+      }
+    });
+
+    socket.on('videoChange', (args) => {
+      connectedUsers.forEach((user) => {
+        if(user.roomId === roomName && user.id != socket.id) {
+          socket.to(roomName).emit('userEditedVideo', {username: user.username, action: args});
+        }
+      })
+    })
+
+    socket.on('getUsersInRoom', (args) => {
+
+      connectedUsers.forEach((user) => {
+        if(user.roomId === roomName && user.id != socket.id) {
+          connectedUsersRoom.push(user);
+        }
+      })
+
+      io.to(socket.id).emit('usersInRoom', connectedUsersRoom);
+
+    });
+
+    socket.on('playVideo', function (args){
+      socket.to(roomName).emit('playVideo');
+    });
+    
+    socket.on('pauseVideo', function (args){
+      socket.to(roomName).emit('pauseVideo');
+    });
+
+    socket.on('videoUrlChange', function (args) {
+      socket.to(roomName).emit('videoUrlChange', args);
+    })
+
+    socket.on('videoTimeChange', function (args) {
+      socket.to(roomName).emit('videoTimeChange', args);
+    })
+
+    socket.on('checkClients', function (args) {
+      const clients = io.sockets.adapter.rooms.get(roomName);
+      
+      const [first] = clients; 
+
+      if(clients.size > 1) {
+        socket.broadcast.to(first).emit('getVideoTime', args);
+      } else if(clients.size == 1) {
+        io.sockets.in(roomName).emit('videoUrlChange', {url: args});
+      }
+    })
+    socket.on('videoTime', function (args) {
+      socket.to(roomName).emit('videoUrlAndTimeChange', args);
+    })
+
+    socket.on('disconnect', function () {
+
+      connectedUsers.forEach(function (user) {
+        if(user['id'] == socket.id) {
+          socket.to(roomName).emit('userExit', user.username);
+          connectedUsers.pop(user);
+        } ;
+      })
+
+
+      // Get the object containing the users in a room
+      let clients = io.sockets.adapter.rooms.get(roomName);
+
+      // If the last user disconnects from the room, delete it.
+      if(!clients) {
+        setTimeout(() => {
+          
+          clients = io.sockets.adapter.rooms.get(roomName);
+
+          // Checking again after 30 seconds before deleting, so the room is not deleted when the page is refreshed
+          if(!clients) {
+            deleteRoom(socket);
+            console.log('Room deleted')
+          }
+        }, 30000)
+      }
+    });
+  });
+
+  console.info(`Listening on: https://ketakinder.tk`);
+
+} catch (e) {
+  
+  console.log("There was an error starting the app");
+  console.log(e.message);
+}

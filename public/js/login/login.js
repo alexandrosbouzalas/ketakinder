@@ -1,7 +1,3 @@
-$("#first").attr("href", "/home");
-$("#second").attr("href", "/register");
-$("#first").first().text("Home");
-$("#second").first().text("Register");
 
 $("#email").addClass("inputBorder inputBorderFocus");
 $("#password").addClass("inputBorder inputBorderFocus");
@@ -71,6 +67,7 @@ function checkPattern(id) {
     if (id === "email") return reUsername.test(element);
   }
   if (id === "password") return rePassword.test(element);
+  
   return false;
 }
 

@@ -1,6 +1,4 @@
-$("#second").remove();
-$("#first").attr("href", "/");
-$("#first").first().text("Home");
+
 
 $("#username").addClass("inputBorder inputBorderFocus");
 $("#email").addClass("inputBorder inputBorderFocus");
@@ -86,9 +84,9 @@ function checkPattern(id) {
   const rePassword =
     /^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){2,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$/;
 
-  if (id === "username") return reUsername.test(element);
-  if (id === "email") return reEmail.test(element);
-  if (id === "password") return rePassword.test(element);
+  if (id === "username") return reUsername.test(element.toString().trim());
+  if (id === "email") return reEmail.test(element.toString().trim());
+  if (id === "password") return rePassword.test(element.toString().trim());
   return false;
 }
 
@@ -97,9 +95,12 @@ const verifySuccess = () => {
 
   const formData = new FormData(document.querySelector("form"));
   for (var pair of formData.entries()) {
-    if (pair[0] === "username") Object.assign(data, { username: pair[1] });
-    if (pair[0] === "email") Object.assign(data, { email: pair[1] });
-    if (pair[0] === "password") Object.assign(data, { password: pair[1] });
+    if (pair[0] === "username")
+      Object.assign(data, { username: pair[1].toString().trim() });
+    if (pair[0] === "email")
+      Object.assign(data, { email: pair[1].toString().trim() });
+    if (pair[0] === "password")
+      Object.assign(data, { password: pair[1].toString().trim() });
   }
 
   $.ajax({

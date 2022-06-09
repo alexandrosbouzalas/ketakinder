@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.3.1/css/flag-icon.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/img/penos.ico" />
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/w2g/room/style.css" />
+    <title>Ketakinder</title>
+  </head>
+  <body onload="startTime()" onload="onbeforeunload()">
+    <div class="navigation">
+      <nav>
+        <div id="logo">
+          <h1>Ketakinder</h1>
+          <img src="/img/penos.png" alt="" />
+          <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+          </div>
+        </div>
+        <div class="nav-links">
+          <a id="first" href="/w2g">Watch2Gether</a>
+          <a id="second" href="/">Home</a>
+          <a id="clock"></a>
+        </div>
+      </nav>
+    </div>
+    <div id="overlay"></div>
+    <div class="container-main">
+      <div class="copy-container">
+        <input id="copy-text" type="text" placeholder=""></input>
+        <button title="Copy & Share" type="submit" id="copy-btn"><i class="fa-solid fa-copy"></i></button>
+      </div>
+      <div class="container-secondary" id="container">
+        <div class="video-player-container">
+          <div id="info-content">
+            <p id="video-player-text">Insert your link below</p>
+            <div class="arrow-icon">
+              <i class="fa-solid fa-arrow-down"></i>
+            </div>
+          </div>
+          <div id="player"></div>
+        </div>
+        <div class="controls-container">
+          <div class="control-button-container" id="button-container">
+            <button class="control-btn" id="play-pause-btn"><i class="fa-solid fa-pause"></i></button>
+            <button class="control-btn" id="mute-unmute-btn"><i class="fa-solid fa-volume-xmark"></i></button>
+          </div>
+          <div class="slider-container">
+            <input type="range" name="time" value="0" id="time-slider" step="0.1">
+          </div>
+          <div class="time-display-container">
+            <p id="current-time">00:00</p>
+            <p id="delimiter">&nbsp;/&nbsp;</p>
+            <p id="end-time">00:00</p>
+          </div>
+          <div class="editing-user-container">
+            <div id="editing-user-action-container">
+              <i id="user-action" class="fa-solid"></i><p id="editing-user"></p>
+            </div>
+          </div>
+        </div>
+        <div class="video-player-inputs-container">
+          <button type="submit" title="Redirect to current video (YouTube)" id="platform-btn"><i class="fa-brands fa-youtube"></i></button>
+          <input id="video-input" type="text" placeholder="Insert YouTube Link here..."></input>
+          <button type="submit" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="show-cards-button-container">
+          <div class="arrow-line-container" title="Show users in the room">
+            <div id="line-left"></div>
+            <div id="line-right"></div>
+          </div>
+        </div>
+        <div class="user-cards-container collapsed">
+          <div class="user-card">
+            <img class="card-image" src="/img/stonks.png" alt="Avatar">
+            <div class="user-card-info">
+              <p class="card-name" title="Me">You</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/js/global.js"></script>
+  <script src = "/socket.io/socket.io.js"></script>
+  <script src="/js/w2g/room/room.js"></script>
+  <script src="https://kit.fontawesome.com/4e5b8d4118.js" crossorigin="anonymous"></script>
+</html>

@@ -1,19 +1,84 @@
-<%- include('../_global.ejs') %>
-<div class="info">
-  <div class="container-main">
-    <div class="video-player-container">
-      <p id="video-player-text">Insert your link below</p>
-      <iframe id="video-player" src="" title="W2G Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.3.1/css/flag-icon.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="icon" href="/img/penos.ico" />
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/w2g/style.css" />
+    <title>Ketakinder</title>
+  </head>
+  <body onload="startTime()" onload="onbeforeunload()">
+    <div class="navigation">
+      <nav>
+        <div id="logo">
+          <h1>Ketakinder</h1>
+          <img src="/img/penos.png" alt="" />
+          <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+          </div>
+        </div>
+        <div class="nav-links">
+          <a id="first" href="/">Home</a>
+          <a id="clock"></a>
+        </div>
+      </nav>
     </div>
-    <div id="video-player-inputs">
-      <button type="submit" id="platform-btn"><i class="fa-brands fa-youtube"></i></button>
-      <input id="video-input" type="text" placeholder="Insert YouTube Link here..."></input>
-      <button type="submit" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    <div class="container-main">
+      <div class="room-creation-container" id="countainer">
+        <div class="video-player-container">
+          <p id="w2g-text">Watch2Gether für Arme</p>
+          <div class="arrow-icon">
+            <i class="fa-solid fa-arrow-down"></i>
+          </div>
+        </div>
+        <div class="button-input-container">
+          <button type="submit" id="room-creation-btn">Raum erstellen</button>
+          <div class="input-container">
+            <input id="room-search-input" type="text" placeholder="Raum ID"></input>
+            <button type="submit" title="Search room with the room ID" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </div>
+        </div>
+        <!-- <div id="room-search-container">
+          <input id="video-input" type="text" placeholder="Insert YouTube Link here..."></input>
+          <button type="submit" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div> -->
+      </div>
     </div>
-  </div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="/js/global.js"></script>
-<script src="/js/w2g/w2g.js"></script>
-<script src="https://kit.fontawesome.com/4e5b8d4118.js" crossorigin="anonymous"></script>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/js/global.js"></script>
+  <script src="/js/w2g/w2g.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://kit.fontawesome.com/4e5b8d4118.js" crossorigin="anonymous"></script>
 </html>

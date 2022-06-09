@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+*::placeholder { 
+  color: black;
+  opacity: 1;
+}
+
 body {
   background-color: #282c34;
 }
@@ -12,7 +17,6 @@ body {
   font-size: 24px;
   max-width: 100%;
   font-family: "Montserrat", sans-serif;
-  min-height: 15vh;
 }
 
 .navigation nav {

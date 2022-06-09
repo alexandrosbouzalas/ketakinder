@@ -1,54 +1,63 @@
-document.getElementById("first").href = "/";
-document.getElementById("first").innerText = "Home";
-document.getElementById("second").href = "/logout";
-document.getElementById("second").innerText = "Logout";
-
-
 function validateInputString(input) {
-    const reInputStringShort = /^https:\/\/youtube\.com\/watch\?v=[a-zA-Z0-9_]+$/;
-    const reInputStringFull = /^https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_]+$/;
 
-    if (!reInputStringShort.test(input) && !reInputStringFull.test(input) ) {
-        return false;
-    } else {
-        return true;
-    }
+  const reInputString = /^((https:\/\/)?(ketakinder\.tk\/w2g\/room\/))?[a-zA-Z0-9]{6}$/;
+
+  if (reInputString.test(input) ) {
+      return true;
+  } else {
+      return false;
+  }
+
 }
 
-$('#platform-btn').click(() => {
-    let inputString = $('#video-input').val();
-    let linkTemplate = "https://www.youtube.com";
 
-    if(inputString) {
-        if(validateInputString(inputString)) {
-            window.location.href = inputString;       
-        } else {
-            $("#video-input").css("border", "3px solid red");
-        }
-    } else {
-        window.location.href = linkTemplate;
-    }
+$('#room-creation-btn').on('click', () => {
+
+    $.ajax({
+        url: "/w2g",
+        method: "POST",
+        contentType: "application/json",
+        success: function (response) {
+
+            window.location.pathname = `/w2g/room/${response}`
+        },
+        error: function (err) {
+          Swal.fire({
+            title: err.responseJSON.msg,
+            icon: "error",
+            allowOutsideClick: false,
+            confirmButtonText: "OK",
+            confirmButtonColor: "#007bff",
+            background: "#f1f4f6",
+            width: "50%",
+          });
+        },
+    });
 })
 
 $('#search-btn').click(() => {
 
-    let inputString = $('#video-input').val();
-    let linkTemplate = "https://www.youtube.com/embed/" 
+  let inputString = $('#room-search-input').val().toString();
 
-    if(inputString) {
+  if(inputString) {
 
-        if(validateInputString(inputString)) {
+      if(validateInputString(inputString)) {
 
-            inputString = inputString.split('=');
-            $('#video-player').attr('src', linkTemplate + inputString[inputString.length - 1]);
-            $("#video-input").css("border", "none");
-            $("#video-player-text").css("display", "none");
-            $("#video-player").css("display", "block");
-            
-        } else {
-            $("#video-input").css("border", "3px solid red");
-        }
-            
-    }
-    
+          // Grab the youtube url
+          inputString = inputString.substring(inputString.length - 6, inputString.length);
+
+          window.location.pathname = `/w2g/room/${inputString}`;
+
+      } else {
+          $("#room-search-input").css("border", "3px solid red");
+      }
+          
+  }
+
+})
+
+$(document).keydown(function(event) {
+  if(event.key === "Enter" && $("#room-search-input").is(":focus")) {
+      $('#search-btn').trigger('click');
+  }
 })

@@ -1,8 +1,26 @@
+.container-main {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
 #welcomebanner {
-  padding: 200px 10px 10px 10px;
-  height: 700px;
   text-align: center;
   font-family: "Poppins";
   color: #fdfd96;
   font-size: 60px;
+}
+
+.welcome-text-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#welcome-image {
+  height: 50%;
+  width: 40%;
+  margin: auto;
 }

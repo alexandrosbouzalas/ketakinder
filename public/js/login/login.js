@@ -1,7 +1,3 @@
-$("#first").attr("href", "/home");
-$("#second").attr("href", "/register");
-$("#first").first().text("Home");
-$("#second").first().text("Register");
 
 $("#email").addClass("inputBorder inputBorderFocus");
 $("#password").addClass("inputBorder inputBorderFocus");

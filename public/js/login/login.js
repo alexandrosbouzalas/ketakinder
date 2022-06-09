@@ -30,7 +30,7 @@ function checkInput() {
       $("#message").addClass("errorText");
 
       valid = false;
-      $("#message").html("Format: text@text.domain");
+      $("#message").html("Invalid format");
       $(this).removeClass("inputBorder");
       $(this).addClass("errorBorder");
     }
@@ -54,25 +54,36 @@ function checkInput() {
 function checkPattern(id) {
   var element = document.getElementById(id).value;
 
+  const reUsername =
+    /^[a-zA-Z0-9](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){2,18}[a-zA-Z0-9]$/;
   const reEmail =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const rePassword =
     /^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){2,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$/;
 
-  if (id === "email") return reEmail.test(element.toString().trim());
-  if (id === "password") return rePassword.test(element.toString().trim());
+  if(reEmail.test(element)) {
+    return reEmail.test(element);
+  } else {
+    if (id === "email") return reUsername.test(element);
+  }
+  if (id === "password") return rePassword.test(element);
+  
   return false;
 }
 
 const verifySuccess = () => {
   data = {};
+  const reEmail =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const formData = new FormData(document.querySelector("form"));
   for (var pair of formData.entries()) {
-    if (pair[0] === "email")
-      Object.assign(data, { email: pair[1].toString().trim() });
-    if (pair[0] === "password")
-      Object.assign(data, { password: pair[1].toString().trim() });
+    if(reEmail.test(pair[1])) {
+      if (pair[0] === "email") Object.assign(data, { email: pair[1] });
+    } else {
+      if (pair[0] === "email") Object.assign(data, { username: pair[1] });
+    }
+    if (pair[0] === "password") Object.assign(data, { password: pair[1] });
   }
 
   $.ajax({
@@ -161,3 +172,9 @@ const verifySuccess = () => {
     },
   });
 };
+
+$(document).keydown(function(event) {
+  if(event.key === "Enter" && ($("#email").is(":focus") || $("#password").is(":focus"))) {
+      $('#submitbutton').trigger('click');
+  }
+})

@@ -30,16 +30,21 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { email, password } = req.body.data;
+  const { username, email, password } = req.body.data;
 
   try {
-    const user = await User.findOne({ email: email });
+    var user;
+    if (username) {
+      user = await User.findOne({ username: username });
+    } else {
+      user = await User.findOne({ email: email });
+    }
 
-    if (!validateEmail(email.toString())) throw new Error("Invalid email");
+
     if (!validatePassword(password.toString()))
       throw new Error("Invalid password");
 
-    if (email && password) {
+    if ((username || email) && password) {
       if (req.session.authenticated) {
         res.json(req.session);
       } else {

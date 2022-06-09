@@ -38,6 +38,34 @@
   width: 100%;
 }
 
+.hidden {
+  display: none !important;
+}
+
+.editing-user-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#editing-user-action-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+#user-action {
+  color:rgb(211, 211, 211);
+  margin: 5px;
+}
+
+#editing-user {
+  margin: 0;
+  color: white;
+  padding-inline: 2px;
+}
+
+
 #player {
   display: none;
   width: 100%;

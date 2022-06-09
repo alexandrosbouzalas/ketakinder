@@ -101,11 +101,11 @@ function onPlayerStateChange(event) {
     $('#play-pause-btn').children().removeClass('fa-pause');
     $('#play-pause-btn').children().addClass('fa-play');
     socket.emit('pauseVideo');
-  } else if (event.data == YT.PlayerState.PLAYING) {
+} else if (event.data == YT.PlayerState.PLAYING) {
     $('#play-pause-btn').children().removeClass('fa-play');
     $('#play-pause-btn').children().addClass('fa-pause');
     socket.emit('playVideo');
-  } else {
+} else {
     $('#play-pause-btn').children().removeClass('fa-play');
     $('#play-pause-btn').children().addClass('fa-pause');
     socket.emit('playVideo');
@@ -335,11 +335,13 @@ $('#play-pause-btn').click(() => {
         $('#play-pause-btn').children().removeClass('fa-play');
         $('#play-pause-btn').children().addClass('fa-pause');
         socket.emit('playVideo');
+        socket.emit('videoChange', 'play');
         
     } else if ($('#play-pause-btn').children().hasClass('fa-pause')){
         player.pauseVideo();
         $('#play-pause-btn').children().removeClass('fa-pause');
         $('#play-pause-btn').children().addClass('fa-play');
+        socket.emit('videoChange', 'pause');
         socket.emit('pauseVideo');
     }
 });
@@ -490,6 +492,21 @@ socket.on("pauseVideo", (args) => {
 socket.on("getVideoTime", (args) => {
     socket.emit('videoTime', {time: player.getCurrentTime(), url: args});
 });
+
+socket.on("userEditedVideo", (args) => {
+    $('.time-display-container').hide();
+
+    $('#user-action').removeClass();
+    $('#user-action').addClass('fa-solid');
+    $('#user-action').addClass('fa-' + args.action);
+    $('#editing-user').text(args.username);
+    
+    setTimeout(() => {
+        $('.time-display-container').show();
+        $('#user-action').removeClass();
+        $('#editing-user').text('');
+    }, 3000);
+})
 
 socket.on("error", (args) => {
     Swal.fire({

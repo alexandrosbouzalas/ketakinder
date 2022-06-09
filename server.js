@@ -136,6 +136,14 @@ try {
       }
     });
 
+    socket.on('videoChange', (args) => {
+      connectedUsers.forEach((user) => {
+        if(user.roomId === roomName && user.id != socket.id) {
+          socket.to(roomName).emit('userEditedVideo', {username: user.username, action: args});
+        }
+      })
+    })
+
     socket.on('getUsersInRoom', (args) => {
 
       connectedUsers.forEach((user) => {
